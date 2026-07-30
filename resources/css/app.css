@@ -1,0 +1,517 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+ @import "bootstrap-icons/font/bootstrap-icons.css";
+ @import "./login.css";
+ @import "./dashboard.css";
+ @import "./user.css";
+
+
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+/* ============================================================
+   APP.CSS
+   Isinya class2 yg dipake berulang di banyak halaman:
+   sidebar, topbar, card putih, badge status, table, tombol, dll.
+   Kalau ada style yg cuma dipake di 1 halaman aja, taro di
+   css halaman itu sendiri (dashboard.css / user.css), JANGAN taro sini.
+   ============================================================ */
+
+:root {
+    --color-primary: #31606a;
+    --color-primary-dark: #1e5864;
+    --color-brand: #4b7983;
+    --color-on-primary: #ffffff;
+
+    --color-bg: #f5f5f5;
+    --color-surface: #ffffff;
+    --color-surface-alt: #F3F4F6;
+    --color-surface-soft: #F9F9FC;
+    --color-bg-icon: rgba(210, 210, 210, 0.25);
+
+    --color-text: #1a1c1d;
+    --color-text-muted: #40484a;
+    --color-outline: #71787a;
+    --color-outline-variant: #c0c8ca;
+    --color-hover: #f3f3f3;
+
+    --color-accent: #299d91;      /* aksen teal, dipake buat "in", active menu transaksi, badge sukses */
+    --color-info: #3b82f6;
+    --color-warning: #f59e0b;
+    --color-error: #E7000B  ;
+    --color-error-bg: #ffdad6;
+
+    --sidebar-width: 260px;
+    --radius-card: 0.5rem;
+    --radius-pill: 25px;
+    --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+body {
+    font-family: 'Inter';
+    background-color: var(--color-bg);
+    color: var(--color-text);
+}
+
+/* ============================================================
+   SIDEBAR
+   ============================================================ */
+.app-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--sidebar-width);
+    height: 100vh;
+    background: var(--color-surface);
+    box-shadow: var(--shadow-card);
+    display: flex;
+    flex-direction: column;
+    z-index: 1030;
+    overflow-y: auto;
+}
+
+.sidebar-brand {
+    padding: 2rem 1.5rem;
+}
+
+.sidebar-brand-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-bottom: 0;
+}
+
+.sidebar-brand-subtitle {
+    font-size: 0.75rem;
+    opacity: .7;
+    margin-bottom: 0;
+}
+
+.sidebar-nav {
+    flex: 1 1 auto;
+    padding: 0 1rem;
+}
+
+.sidebar-group-label {
+    padding: .5rem 1rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    opacity: .5;
+    margin-bottom: 0;
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    padding: .75rem 1rem;
+    border-radius: .5rem;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    font-size: .875rem;
+    margin-bottom: .25rem;
+    transition: background-color .15s ease;
+}
+
+.sidebar-link:hover {
+    background-color: #f0f1f1;
+    color: var(--color-text-muted);
+}
+
+.sidebar-link.active {
+    background-color: var(--color-brand);
+    color: var(--color-on-primary);
+    font-weight: 700;
+}
+
+.sidebar-button{
+    width: 100%;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    font: inherit;
+    text-align: left;
+}
+
+/* link submenu (transaksi) punya warna aksen sendiri kalau lagi aktif */
+.sidebar-link-sub.active {
+    background-color: rgba(41, 157, 145, .1);
+    color: var(--color-accent);
+    border-left: 4px solid var(--color-accent);
+    font-weight: 700;
+}
+
+.sidebar-group-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: none;
+    border: none;
+    padding: .5rem 1rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    opacity: .6;
+}
+
+.sidebar-group-toggle-icon {
+    transition: transform .2s ease;
+}
+
+/* icon chevron dibalik kalau menu lg kebuka (bootstrap kasih aria-expanded otomatis) */
+.sidebar-group-toggle:not(.collapsed) .sidebar-group-toggle-icon {
+    transform: rotate(180deg);
+}
+
+.sidebar-footer {
+    padding: 1.5rem 1rem;
+    margin-top: auto;
+}
+
+/* ============================================================
+   TOPBAR
+   ============================================================ */
+.app-content-wrapper {
+    margin-left: var(--sidebar-width);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.app-topbar {
+    height: 80px;
+    position: sticky;
+    top: 0;
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-outline-variant);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.5rem;
+    z-index: 1020;
+}
+
+.topbar-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-bottom: 0;
+}
+
+.topbar-profile {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+}
+
+.topbar-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--color-brand);
+    color: var(--color-on-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+}
+
+.topbar-profile-name {
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 0;
+}
+
+.topbar-profile-email {
+    font-size: .75rem;
+    color: var(--color-text-muted);
+    margin-bottom: 0;
+}
+
+/* ============================================================
+   MAIN CONTENT
+   ============================================================ */
+.app-main {
+    padding: 1.5rem;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.app-footer {
+    margin-top: auto;
+    padding: 1.5rem;
+    text-align: center;
+    border-top: 1px solid var(--color-outline-variant);
+    background: var(--color-surface);
+    font-size: .75rem;
+    color: var(--color-text-muted);
+}
+
+/* ============================================================
+   CARD PUTIH (dipake di dashboard & user, jadi taro di sini)
+   ============================================================ */
+.card-surface {
+    background: var(--color-surface);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+}
+
+.card-surface-header {
+    padding: 1.25rem;
+    border-bottom: 1px solid rgba(113, 120, 122, .15);
+}
+
+.card-surface-body {
+    padding: 1.25rem;
+}
+
+.section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 0;
+}
+
+.section-subtitle {
+    font-size: .875rem;
+    color: var(--color-outline);
+    margin-bottom: 0;
+}
+
+/* ============================================================
+   BADGE STATUS (dipake buat status transaksi, role, dll)
+   ============================================================ */
+.badge-status {
+    display: inline-block;
+    padding: .28rem .80rem;
+    border-radius: 9999px;
+    font-size: .75rem;
+    font-weight: 700;
+}
+
+.badge-status-success { background-color: rgba(41, 157, 145, .1); color: var(--color-accent); }
+.badge-status-info    { background-color: rgba(59, 130, 246, .1); color: var(--color-info); }
+.badge-status-warning { background-color: rgba(245, 158, 11, .1); color: var(--color-warning); }
+.badge-status-danger  { background-color: var(--color-error-bg); color: var(--color-error); }
+
+/* ============================================================
+   TABLE
+   ============================================================ */
+.table-custom {
+    margin-bottom: 0;
+}
+
+.table-custom thead {
+    border-top: 1px solid  var(--color-surface-soft);
+    border-bottom: 1px solid  var(--color-surface-soft);
+}
+
+.table-custom thead th{
+    background-color:  var(--color-surface-soft);
+}
+
+.table-custom thead th {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    letter-spacing: .03em;
+    white-space: nowrap;
+}
+
+.table-custom tbody tr:hover > *{
+    background: var(--color-hover) !important;
+}
+
+.table td,
+.table th{
+    padding:.90rem;
+}
+
+.table-custom tbody td{
+    font-size: 14px;
+       border-top:none;
+    border-bottom:1px solid #f1f5f9;
+
+}
+
+.table-code{
+    font-size:.75rem;
+    font-weight:700;
+    color:var(--color-primary);
+}
+
+/* ============================================================
+   TOMBOL
+   ============================================================ */
+.btn-brand {
+    background-color: var(--color-primary-dark);
+    color: var(--color-on-primary);
+    border: none;
+}
+
+.btn-brand:hover {
+    background-color: #15424b;
+    color: var(--color-on-primary);
+}
+
+.btn-accent {
+    background-color: var(--color-accent);
+    color: var(--color-on-primary);
+    border: none;
+}
+
+.btn-accent:hover {
+    background-color: #207d74;
+    color: var(--color-on-primary);
+}
+
+/* icon button buat aksi tabel (lihat/edit/hapus) */
+.action-icon-btn {
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    transition: transform .15s ease;
+}
+
+.action-icon-btn:hover {
+    transform: scale(1.15);
+}
+
+.action-icon-view   { color: var(--color-primary); }
+.action-icon-edit   { color: var(--color-warning); }
+.action-icon-delete { color: var(--color-error); }
+
+/* ============================================================
+   FORM INPUT PILL (input rounded penuh, dipake di form tambah user & search)
+   ============================================================ */
+.form-control-pill {
+    border-radius: 20px;
+    border: 1px solid var(--color-outline-variant);
+    padding: 0.50rem 1rem;
+}
+.search-control-pill {
+    border-radius: var(--radius-pill);
+    border: 1px var(--color-outline-variant);
+    padding: 0.50rem 1rem;
+}
+
+.form-select-pill {
+    border-radius: 20px;
+    border: 1px solid var(--color-outline-variant);
+    padding: 0.50rem 1rem;
+}
+.form-select-table-pill {
+    border-radius: var(--radius-pill);
+    border: 1px var(--color-outline-variant);
+    padding: 0.50rem 1rem;
+}
+
+.form-control-pill:focus,
+.form-select-pill:focus {
+    border-color: var(--color-brand);
+    box-shadow: 0 0 0 1px var(--color-brand);
+}
+
+/* ============================================================
+   TOGGLE SWITCH (dipake di form tambah user & kolom status tabel)
+   ============================================================ */
+.toggle-switch-wrap {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+}
+
+.toggle-switch-wrap input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-switch-slider {
+    position: absolute;
+    inset: 0;
+    background-color: var(--color-outline-variant);
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: background-color .2s ease;
+}
+
+.toggle-switch-slider::before {
+    content: "";
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    left: 2px;
+    top: 2px;
+    background-color: var(--color-surface);
+    border-radius: 50%;
+    transition: transform .2s ease;
+}
+
+.toggle-switch-wrap input:checked + .toggle-switch-slider {
+    background-color: var(--color-brand);
+}
+
+.toggle-switch-wrap input:checked + .toggle-switch-slider::before {
+    transform: translateX(20px);
+}
+
+/* toggle versi kecil (dipake di dalem tabel) */
+.toggle-switch-wrap.toggle-sm {
+    width: 36px;
+    height: 20px;
+}
+
+.toggle-switch-wrap.toggle-sm .toggle-switch-slider::before {
+    height: 16px;
+    width: 16px;
+}
+
+.toggle-switch-wrap.toggle-sm input:checked + .toggle-switch-slider::before {
+    transform: translateX(16px);
+}
+
+/* efek klik dari app.js */
+.is-pressed {
+    transform: scale(.95);
+}
+
+/* ============================================================
+   RESPONSIVE - tablet & desktop aja (sesuai request, ga usah mobile kecil)
+   ============================================================ */
+@media (max-width: 991.98px) {
+    :root {
+        --sidebar-width: 220px;
+    }
+
+    .sidebar-brand-title { font-size: 1rem; }
+    .app-main { padding: 1rem; }
+}
+
+@media (max-width: 767.98px) {
+    /* tablet portrait ke bawah: sidebar jadi icon-only biar konten ga kesempit */
+    .app-sidebar { width: 76px; }
+    .app-content-wrapper { margin-left: 76px; }
+    .sidebar-brand-subtitle,
+    .sidebar-group-label,
+    .sidebar-link span,
+    .sidebar-group-toggle span,
+    .sidebar-group-toggle-icon { display: none; }
+    .sidebar-link { justify-content: center; }
+}
+

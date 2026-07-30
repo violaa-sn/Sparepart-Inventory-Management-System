@@ -1,0 +1,302 @@
+
+/* --- Wrapper utama, buat naruh card di tengah layar --- */
+.login-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+/* --- Card login --- */
+/* Radius 14px ga ada di token, jadi ditulis langsung di sini aja */
+.login-card {
+    width: 100%;
+    max-width: 1100px;
+    display: grid;
+    grid-template-columns: 1fr;
+    background-color: var(--color-surface);
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid #e8e8e8;
+    box-shadow: var(--shadow-card);
+}
+
+@media (min-width: 768px) {
+    .login-card {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* =========================================================
+   SISI KIRI (Branding)
+   ========================================================= */
+.login-brand {
+    background-color: var(--color-brand);
+    padding: 3rem;
+    position: relative;
+    overflow: hidden;
+    color: var(--color-on-primary);
+}
+
+.brand-title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 2rem;
+}
+
+.brand-heading {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+}
+
+.brand-desc {
+    font-size: 16px;
+    max-width: 380px;
+    opacity: 0.9;
+}
+
+.brand-footer-text {
+    font-size: 12px;
+    opacity: 0.8;
+    margin: 0;
+}
+
+/* =========================================================
+   SISI KANAN (Form Login)
+   ========================================================= */
+.login-form-side {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2rem;
+}
+
+@media (min-width: 768px) {
+    .login-form-side {
+        padding: 4rem;
+    }
+}
+
+.login-form-container {
+    max-width: 400px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* Header buat versi mobile aja */
+.login-header-mobile {
+    margin-bottom: 2rem;
+}
+
+.brand-icon-mobile {
+    font-size: 48px;
+    color: var(--color-brand);
+    margin-bottom: 0.5rem;
+    display: inline-block;
+}
+
+.brand-title-mobile {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+.brand-subtitle-mobile {
+    font-size: 12px;
+    color: var(--color-text-muted);
+}
+
+.login-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 0.5rem;
+}
+
+.login-subtitle {
+    font-size: 14px;
+    color: var(--color-text-muted);
+}
+
+/* --- Label form --- */
+.login-form-container .form-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    margin-bottom: 0.5rem;
+}
+
+/* --- Input dengan icon di kiri (dan kanan khusus password) --- */
+.input-icon-group {
+    position: relative;
+}
+
+.input-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-outline);
+    font-size: 20px;
+    pointer-events: none;
+}
+
+/* Radius input ikut radius card (14px), ga ada token yang cocok */
+.input-with-icon {
+    padding: 0.85rem 1rem 0.85rem 3rem;
+    background-color: var(--color-surface-soft);
+    border: 1px solid var(--color-outline-variant);
+    border-radius: 14px;
+}
+
+.input-with-icon-right {
+    padding-right: 3rem;
+}
+
+.input-with-icon:focus {
+    border-color: var(--color-brand);
+    box-shadow: 0 0 0 0.15rem rgba(75, 121, 131, 0.25);
+}
+
+/* Tombol icon show/hide password */
+.btn-toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--color-outline);
+    padding: 0;
+    line-height: 0;
+}
+
+.btn-toggle-password:hover {
+    color: var(--color-primary);
+}
+
+/* --- Link lupa password & daftar --- */
+.link-forgot,
+.link-register {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-brand);
+    text-decoration: none;
+}
+
+.link-forgot:hover,
+.link-register:hover {
+    text-decoration: underline;
+}
+
+/* --- Checkbox ingat saya --- */
+.form-check-label {
+    font-size: 12px;
+    color: var(--color-text-muted);
+}
+
+/* --- Tombol login --- */
+.btn-login {
+    background-color: var(--color-brand);
+    color: var(--color-on-primary);
+    font-size: 18px;
+    font-weight: 600;
+    padding: 1rem;
+    border-radius: 14px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-login:hover {
+    background-color: var(--color-primary);
+    color: var(--color-on-primary);
+}
+
+.btn-login:active {
+    transform: scale(0.98);
+}
+
+/* --- Teks daftar akun di bawah form --- */
+.login-register-text {
+    margin-top: 2.5rem;
+    font-size: 14px;
+    color: var(--color-text-muted);
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+.login-footer {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 0;
+    right: 0;
+}
+
+.login-footer-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    opacity: 0.6;
+    font-size: 11px;
+    color: var(--color-text-muted);
+}
+
+.login-footer-links {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.login-footer-links a {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    text-decoration: none;
+}
+
+.login-footer-links a:hover {
+    color: var(--color-primary);
+}
+
+.btn-toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 24px;
+    height: 24px;
+
+    padding: 0;
+    margin: 0;
+
+    background: transparent;
+    border: none;
+    color: var(--color-outline);
+    cursor: pointer;
+}
+
+.btn-toggle-password:hover {
+    color: var(--color-primary);
+}
+
+.btn-toggle-password:active,
+.btn-toggle-password:focus,
+.btn-toggle-password:focus-visible {
+    transform: translateY(-50%);
+    outline: none;
+    box-shadow: none;
+}

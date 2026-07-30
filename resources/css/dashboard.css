@@ -1,0 +1,177 @@
+/* ============================================================
+   DASHBOARD.CSS
+   Cuma dipake di halaman dashboard. Style umum (card, badge, table)
+   udah ada di app.css, jadi di sini fokus yg spesifik dashboard aja.
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   TOTAL DATA (grid 3 kolom 2 baris)
+   ------------------------------------------------------------ */
+.stat-grid {
+    border-top: none;
+    border-left: none;
+}
+
+.stat-item {
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-right: 1px #D1D1D1;
+    border-bottom: 1px #D1D1D1;
+    transition: background-color .15s ease;
+}
+
+.stat-border {
+    border-bottom: none;
+}
+.stat-border-right {
+    border-right: none;
+}
+
+.stat-item:hover {
+    background-color: var(--color-surface-soft);
+}
+
+.stat-icon-box {
+    width: 40px;
+    height: 56px;
+    border-radius: 0.20rem;
+    background-color: var(--color-bg-icon);
+    color: #878787;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: #878787;
+    margin-bottom: 0;
+}
+
+.stat-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0;
+}
+
+.stat-arrow {
+    font-size:1.7rem; 
+    color: var(--color-outline);
+    opacity: .4;
+    transition: opacity .15s ease;
+}
+
+.stat-item:hover .stat-arrow {
+    opacity: 1;
+    color: var(--color-accent);
+}
+
+/* ------------------------------------------------------------
+   CHART TRANSAKSI IN VS OUT (bar chart manual pake css, susah
+   dibikin pake bootstrap murni jadi custom di sini)
+   ------------------------------------------------------------ */
+.chart-legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    display: inline-block;
+}
+
+.chart-legend-dot-in  { background-color: var(--color-accent); }
+.chart-legend-dot-out { background-color: #e8e8e8; }
+
+.chart-area {
+    height: 288px;
+    display: flex;
+}
+
+.chart-y-axis {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-right: 1rem;
+    padding-bottom: 2.5rem;
+    font-size: .75rem;
+    color: var(--color-text-muted);
+}
+
+.chart-plot {
+    flex: 1 1 auto;
+    border-bottom: 1px solid var(--color-outline-variant);
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0 1rem;
+}
+
+.chart-bar-group {
+    flex: 1 1 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: .25rem;
+    height: 100%;
+}
+
+.chart-bar {
+    width: 12px;
+    border-radius: 2px 2px 0 0;
+}
+
+.chart-bar-in  { background-color: var(--color-accent); }
+.chart-bar-out { background-color: #e8e8e8; }
+
+.chart-x-axis {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 1rem 0;
+    font-size: .75rem;
+    color: var(--color-text-muted);
+}
+
+.chart-x-axis span {
+    flex: 1 1 0;
+    text-align: center;
+}
+
+/* ------------------------------------------------------------
+   LOW STOCK ALERT
+   ------------------------------------------------------------ */
+.stock-alert-card {
+    background-color: var(--color-surface-alt);
+    border-radius: .5rem;
+    padding: 1.5rem;
+}
+
+.stock-alert-name {
+    font-weight: 700;
+    margin-bottom: 0;
+}
+
+.stock-alert-id {
+    font-size: .75rem;
+    color: var(--color-text-muted);
+    margin-bottom: 0;
+}
+
+.stock-alert-count {
+    color: var(--color-error);
+    font-weight: 700;
+}
+
+.stock-progress {
+    background-color: #E5E7EB;
+    height: 10px;
+    border-radius: 9999px;
+    overflow: hidden;
+}
+
+.stock-progress-bar {
+    background-color: var(--color-error);
+    height: 100%;
+    border-radius: 9999px;
+}
