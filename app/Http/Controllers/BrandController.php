@@ -10,9 +10,36 @@ class BrandController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $search = $request->search;
+        $status = $request->status;
+
+        $brand = Brand::withCount('spareparts')
+
+            ->when($search, function ($query) use ($search) {
+
+                $query->where(function ($q) use ($search) {
+
+                    $q->where('kode_brand', 'like', "%{$search}%")
+                        ->orWhere('nama_brand', 'like', "%{$search}%");
+                });
+            })
+
+            ->when($status, function ($query) use ($status) {
+
+                $query->where('status_brand', $status);
+            })
+
+            ->latest()
+
+            ->paginate(10)
+
+            ->withQueryString();
+
+        $kodeBrand = Brand::generateKode();
+
+        return view('brand.index', compact('brand', 'kodeBrand'));
     }
 
     /**
@@ -20,7 +47,9 @@ class BrandController extends Controller
      */
     public function create()
     {
-        //
+        $kodeBrand = Brand::generateKode();
+
+        return view('brand.create', compact('kodeBrand'));
     }
 
     /**
@@ -28,7 +57,23 @@ class BrandController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'nama_brand' => 'required|string|max:100',
+            'status_brand' => 'nullable'
+        ]);
+
+        $data['kode_brand'] = Brand::generateKode();
+
+        $data['status_brand'] =
+            $request->has('status_brand')
+            ? 'aktif'
+            : 'nonaktif';
+
+        Brand::create($data);
+
+        return redirect()
+            ->route('brand.index')
+            ->with('success', 'brand berhasil ditambahkan.');
     }
 
     /**
@@ -44,7 +89,7 @@ class BrandController extends Controller
      */
     public function edit(Brand $brand)
     {
-        //
+        return view('brand.edit', compact('brand'));
     }
 
     /**
@@ -52,7 +97,37 @@ class BrandController extends Controller
      */
     public function update(Request $request, Brand $brand)
     {
-        //
+        $data = $request->validate([
+            'nama_brand' => 'required|string|max:100',
+            'status_brand' => 'nullable'
+        ]);
+
+        $data['status_brand'] = $request->has('status_brand')
+            ? 'aktif'
+            : 'nonaktif';
+
+        $brand->update($data);
+
+        return redirect()
+            ->route('brand.index')
+            ->with('success', 'brand berhasil diperbarui.');
+    }
+
+    public function toggleStatus(Brand $brand)
+    {
+        $brand->status_brand =
+            $brand->status_brand == 'aktif'
+            ? 'nonaktif'
+            : 'aktif';
+
+        $brand->save();
+
+        return response()->json([
+
+            'success' => true,
+            'status' => $brand->status_brand
+
+        ]);
     }
 
     /**
@@ -60,6 +135,78 @@ class BrandController extends Controller
      */
     public function destroy(Brand $brand)
     {
-        //
+        if ($brand->spareparts()->exists()) {
+
+            return back()->with(
+                'error',
+                'brand masih digunakan oleh sparepart.'
+            );
+        }
+
+        $brand->delete();
+
+        return back()->with(
+            'success',
+            'brand berhasil dihapus.'
+        );
+    }
+
+    public function trash(Request $request)
+    {
+        $search = $request->search;
+        $status = $request->status;
+
+        $brand = Brand::onlyTrashed()
+            ->withCount('spareparts')
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('kode_brand', 'like', "%{$search}%")
+                        ->orWhere('nama_brand', 'like', "%{$search}%");
+                });
+            })
+
+            ->when($status, function ($query) use ($status) {
+                $query->where('status_brand', $status);
+            })
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+
+        return view(
+            'brand.trash',
+            compact('brand')
+        );
+    }
+
+    public function restore($id)
+    {
+        $brand = Brand::onlyTrashed()->findOrFail($id);
+
+        $brand->restore();
+
+        return redirect()->route('brand.trash')
+            ->with('success', 'brand berhasil dipulihkan.');
+    }
+
+    public function forceDelete($id)
+    {
+        $brand = Brand::onlyTrashed()
+            ->findOrFail($id);
+
+        if ($brand->spareparts()->withTrashed()->exists()) {
+            return back()->with(
+                'error',
+                'brand masih memiliki relasi sparepart.'
+            );
+        }
+
+        $brand->forceDelete();
+
+        return redirect()
+            ->route('brand.trash')
+            ->with(
+                'success',
+                'brand berhasil dihapus permanen.'
+            );
     }
 }

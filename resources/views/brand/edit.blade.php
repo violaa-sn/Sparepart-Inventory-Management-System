@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Edit kategori - Sparepart Manager')
-@section('page-title', 'Edit Kategori')
+@section('title', 'Edit Brand - Sparepart Manager')
+@section('page-title', 'Edit Brand')
 
 @section('content')
 
@@ -10,15 +10,15 @@
 
             <section class="card-surface">
                 <div class="card-surface-header d-flex justify-content-between align-items-center">
-                    <h2 class="section-title mb-0">Edit Kategori</h2>
+                    <h2 class="section-title mb-0">Edit Brand</h2>
 
-                    <a href="{{ route('kategori.index') }}" class="btn btn-outline-secondary">
+                    <a href="{{ route('brand.index') }}" class="btn btn-outline-secondary">
                         <i class="bi bi-arrow-left"></i>
                         Kembali
                     </a>
                 </div>
 
-                <form class="card-surface-body" action="{{ route('kategori.update', $kategori) }}" method="POST">
+                <form class="card-surface-body" action="{{ route('brand.update', $brand) }}" method="POST">
 
                     @csrf
                     @method('PUT')
@@ -27,20 +27,20 @@
 
                         <div class="col-md-6 col-lg-4">
                             <label class="form-label text-uppercase small">
-                                Kode Kategori
+                                Kode Brand
                             </label>
 
-                            <input type="text" class="form-control form-control-pill" value="{{ $kategori->kode_kategori }}"
+                            <input type="text" class="form-control form-control-pill" value="{{ $brand->kode_brand }}"
                                 disabled>
                         </div>
 
                         <div class="col-md-6 col-lg-4">
                             <label class="form-label text-uppercase small fw-semibold">
-                                Nama Kategori
+                                Nama Brand
                             </label>
 
-                            <input type="text" class="form-control form-control-pill" name="nama_kategori"
-                                value="{{ old('nama_kategori', $kategori->nama_kategori) }}">
+                            <input type="text" class="form-control form-control-pill" name="nama_brand"
+                                value="{{ old('nama_brand', $brand->nama_brand) }}">
                         </div>
 
                         <div class="col-md-6 col-lg-4 d-flex align-items-end pb-1">
@@ -51,8 +51,8 @@
                                 </span>
 
                                 <span class="toggle-switch-wrap">
-                                    <input type="checkbox" name="status_kategori" value="aktif"
-                                        {{ old('status_kategori', $kategori->status_kategori) == 'aktif' ? 'checked' : '' }}>
+                                    <input type="checkbox" name="status_brand" value="aktif"
+                                        {{ old('status_brand', $brand->status_brand) == 'aktif' ? 'checked' : '' }}>
 
                                     <span class="toggle-switch-slider"></span>
                                 </span>
@@ -64,7 +64,7 @@
 
                     <div class="mt-4 d-flex justify-content-end gap-2">
 
-                        <a href="{{ route('kategori.index') }}" class="btn btn-outline-danger px-4">
+                        <a href="{{ route('brand.index') }}" class="btn btn-outline-danger px-4">
                             Batal
                         </a>
 

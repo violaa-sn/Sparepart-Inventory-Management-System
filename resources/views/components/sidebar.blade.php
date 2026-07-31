@@ -29,14 +29,19 @@
             <span>Kategori</span>
         </a>
 
-        <a href="{{ route('brands.index') }}" class="sidebar-link {{ request()->routeIs('brands.*') ? 'active' : '' }}">
-            <i class="bi bi-award"></i>
+        <a href="{{ route('brand.index') }}" class="sidebar-link {{ request()->routeIs('brand.*') ? 'active' : '' }}">
+            <i class="bi bi-bookmark-star"></i>
             <span>Brand</span>
+        </a>
+
+        <a href="{{ route('unit.index') }}" class="sidebar-link {{ request()->routeIs('unit.*') ? 'active' : '' }}">
+            <i class="bi bi-rulers"></i>
+            <span>Unit</span>
         </a>
 
         <a href="{{ route('suppliers.index') }}"
             class="sidebar-link {{ request()->routeIs('suppliers.*') ? 'active' : '' }}">
-            <i class="bi bi-building"></i>
+            <i class="bi bi-truck"></i>
             <span>Supplier</span>
         </a>
 

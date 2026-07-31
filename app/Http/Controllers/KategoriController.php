@@ -39,13 +39,7 @@ class KategoriController extends Controller
 
         $kodeKategori = Kategori::generateKode();
 
-        return view(
-            'kategori.index',
-            compact(
-                'kategori',
-                'kodeKategori'
-            )
-        );
+        return view('kategori.index', compact('kategori', 'kodeKategori'));
     }
 
     /**
@@ -55,10 +49,7 @@ class KategoriController extends Controller
     {
         $kodeKategori = Kategori::generateKode();
 
-        return view(
-            'kategori.create',
-            compact('kodeKategori')
-        );
+        return view('kategori.create', compact('kodeKategori'));
     }
 
     /**
@@ -167,25 +158,18 @@ class KategoriController extends Controller
 
         $kategori = Kategori::onlyTrashed()
             ->withCount('spareparts')
-
             ->when($search, function ($query) use ($search) {
-
                 $query->where(function ($q) use ($search) {
-
                     $q->where('kode_kategori', 'like', "%{$search}%")
                         ->orWhere('nama_kategori', 'like', "%{$search}%");
                 });
             })
 
             ->when($status, function ($query) use ($status) {
-
                 $query->where('status_kategori', $status);
             })
-
             ->latest()
-
             ->paginate(10)
-
             ->withQueryString();
 
         return view(
@@ -207,7 +191,6 @@ class KategoriController extends Controller
     public function forceDelete($id)
     {
         $kategori = Kategori::onlyTrashed()
-
             ->findOrFail($id);
 
         if ($kategori->spareparts()->withTrashed()->exists()) {

@@ -2,6 +2,9 @@ import './bootstrap';
 import './users';
 import './login';
 import './kategori';
+import './brand';
+import './unit';
+
 import * as bootstrap from 'bootstrap';
 
 window.bootstrap = bootstrap;

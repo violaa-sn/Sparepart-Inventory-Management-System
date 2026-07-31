@@ -1,4 +1,4 @@
-document.querySelectorAll(".js-kategori-status-toggle").forEach(toggle => {
+document.querySelectorAll(".js-brand-status-toggle").forEach(toggle => {
 
     toggle.addEventListener("change", function () {
 
@@ -8,9 +8,9 @@ document.querySelectorAll(".js-kategori-status-toggle").forEach(toggle => {
 
         const text = row.querySelector(".user-status-text");
 
-        const kategoriId = this.dataset.id;
+        const brandId = this.dataset.id;
 
-        fetch(`/kategori/${kategoriId}/toggle-status`, {
+        fetch(`/brand/${brandId}/toggle-status`, {
 
             method: "PATCH",
 
