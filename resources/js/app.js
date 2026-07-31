@@ -1,6 +1,7 @@
 import './bootstrap';
 import './users';
 import './login';
+import './kategori';
 import * as bootstrap from 'bootstrap';
 
 window.bootstrap = bootstrap;

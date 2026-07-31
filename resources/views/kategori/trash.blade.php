@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Manajemen kategori - Sparepart Manager')
-@section('page-title', 'Daftar Kategori')
+@section('page-title', 'Trash Kategori')
 
 @section('content')
 
@@ -33,30 +33,17 @@
     <section class="card-surface">
         <div class="card-surface-header">
             <div class="d-flex justify-content-between align-items-center">
-                <h3 class="section-title mb-0">Daftar Kategori</h3>
+                <h3 class="section-title mb-0">Daftar Kategori Trash</h3>
                 <div class="d-flex align-items-center gap-2">
 
-                    <a href="{{ route('kategori.trash') }}"
-                        class="btn btn-outline-danger btn-sm d-flex align-items-center gap-2 px-3">
-
-                        <i class="bi bi-trash3"></i>
-
-                        Trash Kategori
-
-                    </a>
-
-                    <a href="{{ route('kategori.create') }}"
-                        class="btn btn-brand btn-sm d-flex align-items-center gap-2 px-3">
-
-                        <i class="bi bi-plus-circle"></i>
-
-                        Tambah Kategori
-
+                    <a href="{{ route('kategori.index') }}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i>
+                        Kembali
                     </a>
 
                 </div>
             </div>
-            <form method="GET" action="{{ route('kategori.index') }}">
+            <form method="GET" action="{{ route('kategori.trash') }}">
                 <div class="row g-3 mt-3">
                     <div class="col-md-8">
                         <div class="position-relative">
@@ -119,27 +106,41 @@
                                 </span>
                             </td>
                             <td>
-                                <div class="d-flex justify-content-center align-items-center gap-3">
-                                    <a href="{{ route('kategori.edit', $item) }}" class="action-icon-btn action-icon-edit"
-                                        title="Edit">
-                                        <i class="bi bi-pencil"></i>
-                                    </a>
-                                    <form action="{{ route('kategori.destroy', $item) }}" method="POST">
+
+                                <div class="d-flex justify-content-center align-items-center gap-2">
+
+                                    {{-- Restore --}}
+                                    <form action="{{ route('kategori.restore', $item->id) }}" method="POST">
+
+                                        @csrf
+                                        @method('PATCH')
+
+                                        <button type="submit" class="btn btn-success btn-sm"
+                                            onclick="return confirm('Pulihkan kategori ini?')">
+
+                                            <i class="bi bi-arrow-counterclockwise"></i>
+
+                                        </button>
+
+                                    </form>
+
+                                    {{-- Hapus Permanen --}}
+                                    <form action="{{ route('kategori.force-delete', $item->id) }}" method="POST">
+
                                         @csrf
                                         @method('DELETE')
-                                        <button class="action-icon-btn action-icon-delete"
-                                            onclick="return confirm('Hapus kategori ini?')">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </form>
-                                    <label class="toggle-switch-wrap toggle-sm">
-                                        <input type="checkbox" class="js-kategori-status-toggle"
-                                            data-id="{{ $item->id }}"
-                                            {{ $item->status_kategori == 'aktif' ? 'checked' : '' }}>
 
-                                        <span class="toggle-switch-slider"></span>
-                                    </label>
+                                        <button type="submit" class="btn btn-danger btn-sm"
+                                            onclick="return confirm('Kategori akan dihapus permanen. Lanjutkan?')">
+
+                                            <i class="bi bi-trash"></i>
+
+                                        </button>
+
+                                    </form>
+
                                 </div>
+
                             </td>
                         </tr>
                     @empty

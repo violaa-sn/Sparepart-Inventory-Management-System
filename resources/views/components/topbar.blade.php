@@ -1,4 +1,4 @@
-{{-- <header class="app-topbar">
+<header class="app-topbar">
 
     <div>
         <h2 class="topbar-title">
@@ -20,4 +20,4 @@
             </p>
         </div>
     </div>
-</header> --}}
+</header>
