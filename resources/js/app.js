@@ -1,7 +1,9 @@
 import './bootstrap';
-import './user';
+import './users';
 import './login';
 import * as bootstrap from 'bootstrap';
+
+window.bootstrap = bootstrap;
 
 /**
  * app.js

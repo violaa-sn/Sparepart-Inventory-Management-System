@@ -14,10 +14,12 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         User::create([
-            'nama_user' => 'Admin',
-            'email' => 'admin@gmail.com',
-            'nomor_telepon' => '081234567890',
-            'password' => 'admin123',
+            'nama_user'      => 'Admin',
+            'email'          => 'admin@gmail.com',
+            'nomor_telepon'  => '081234567890',
+            'password'       => 'admin123',
+            'role'           => 'manager',
+            'status_user'    => 'aktif',
         ]);
     }
 }

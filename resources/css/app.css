@@ -1,10 +1,9 @@
-@import 'bootstrap/dist/css/bootstrap.min.css';
- @import "bootstrap-icons/font/bootstrap-icons.css";
- @import "./login.css";
- @import "./dashboard.css";
- @import "./user.css";
-
-
+@import "bootstrap/dist/css/bootstrap.min.css";
+@import "bootstrap-icons/font/bootstrap-icons.css";
+@import "./login.css";
+@import "./dashboard.css";
+@import "./users.css";
+@import "./user_detail.css";
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -12,8 +11,10 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans:
+        "Instrument Sans", ui-sans-serif, system-ui, sans-serif,
+        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+        "Noto Color Emoji";
 }
 
 /* ============================================================
@@ -32,8 +33,8 @@
 
     --color-bg: #f5f5f5;
     --color-surface: #ffffff;
-    --color-surface-alt: #F3F4F6;
-    --color-surface-soft: #F9F9FC;
+    --color-surface-alt: #f3f4f6;
+    --color-surface-soft: #f9f9fc;
     --color-bg-icon: rgba(210, 210, 210, 0.25);
 
     --color-text: #1a1c1d;
@@ -42,10 +43,10 @@
     --color-outline-variant: #c0c8ca;
     --color-hover: #f3f3f3;
 
-    --color-accent: #299d91;      /* aksen teal, dipake buat "in", active menu transaksi, badge sukses */
+    --color-accent: #299d91; /* aksen teal, dipake buat "in", active menu transaksi, badge sukses */
     --color-info: #3b82f6;
     --color-warning: #f59e0b;
-    --color-error: #E7000B  ;
+    --color-error: #e7000b;
     --color-error-bg: #ffdad6;
 
     --sidebar-width: 260px;
@@ -55,7 +56,7 @@
 }
 
 body {
-    font-family: 'Inter';
+    font-family: "Inter";
     background-color: var(--color-bg);
     color: var(--color-text);
 }
@@ -90,7 +91,7 @@ body {
 
 .sidebar-brand-subtitle {
     font-size: 0.75rem;
-    opacity: .7;
+    opacity: 0.7;
     margin-bottom: 0;
 }
 
@@ -100,26 +101,26 @@ body {
 }
 
 .sidebar-group-label {
-    padding: .5rem 1rem;
+    padding: 0.5rem 1rem;
     font-size: 0.6875rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: .05em;
-    opacity: .5;
+    letter-spacing: 0.05em;
+    opacity: 0.5;
     margin-bottom: 0;
 }
 
 .sidebar-link {
     display: flex;
     align-items: center;
-    gap: .75rem;
-    padding: .75rem 1rem;
-    border-radius: .5rem;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
     color: var(--color-text-muted);
     text-decoration: none;
-    font-size: .875rem;
-    margin-bottom: .25rem;
-    transition: background-color .15s ease;
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
+    transition: background-color 0.15s ease;
 }
 
 .sidebar-link:hover {
@@ -133,7 +134,7 @@ body {
     font-weight: 700;
 }
 
-.sidebar-button{
+.sidebar-button {
     width: 100%;
     border: 0;
     background: none;
@@ -144,7 +145,7 @@ body {
 
 /* link submenu (transaksi) punya warna aksen sendiri kalau lagi aktif */
 .sidebar-link-sub.active {
-    background-color: rgba(41, 157, 145, .1);
+    background-color: rgba(41, 157, 145, 0.1);
     color: var(--color-accent);
     border-left: 4px solid var(--color-accent);
     font-weight: 700;
@@ -157,16 +158,16 @@ body {
     justify-content: space-between;
     background: none;
     border: none;
-    padding: .5rem 1rem;
+    padding: 0.5rem 1rem;
     font-size: 0.6875rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: .05em;
-    opacity: .6;
+    letter-spacing: 0.05em;
+    opacity: 0.6;
 }
 
 .sidebar-group-toggle-icon {
-    transition: transform .2s ease;
+    transition: transform 0.2s ease;
 }
 
 /* icon chevron dibalik kalau menu lg kebuka (bootstrap kasih aria-expanded otomatis) */
@@ -212,7 +213,7 @@ body {
 .topbar-profile {
     display: flex;
     align-items: center;
-    gap: .75rem;
+    gap: 0.75rem;
 }
 
 .topbar-avatar {
@@ -234,7 +235,7 @@ body {
 }
 
 .topbar-profile-email {
-    font-size: .75rem;
+    font-size: 0.75rem;
     color: var(--color-text-muted);
     margin-bottom: 0;
 }
@@ -256,7 +257,7 @@ body {
     text-align: center;
     border-top: 1px solid var(--color-outline-variant);
     background: var(--color-surface);
-    font-size: .75rem;
+    font-size: 0.75rem;
     color: var(--color-text-muted);
 }
 
@@ -271,7 +272,7 @@ body {
 
 .card-surface-header {
     padding: 1.25rem;
-    border-bottom: 1px solid rgba(113, 120, 122, .15);
+    border-bottom: 1px solid rgba(113, 120, 122, 0.15);
 }
 
 .card-surface-body {
@@ -286,7 +287,7 @@ body {
 }
 
 .section-subtitle {
-    font-size: .875rem;
+    font-size: 0.875rem;
     color: var(--color-outline);
     margin-bottom: 0;
 }
@@ -296,16 +297,28 @@ body {
    ============================================================ */
 .badge-status {
     display: inline-block;
-    padding: .28rem .80rem;
+    padding: 0.28rem 0.8rem;
     border-radius: 9999px;
-    font-size: .75rem;
+    font-size: 0.75rem;
     font-weight: 700;
 }
 
-.badge-status-success { background-color: rgba(41, 157, 145, .1); color: var(--color-accent); }
-.badge-status-info    { background-color: rgba(59, 130, 246, .1); color: var(--color-info); }
-.badge-status-warning { background-color: rgba(245, 158, 11, .1); color: var(--color-warning); }
-.badge-status-danger  { background-color: var(--color-error-bg); color: var(--color-error); }
+.badge-status-success {
+    background-color: rgba(41, 157, 145, 0.1);
+    color: var(--color-accent);
+}
+.badge-status-info {
+    background-color: rgba(59, 130, 246, 0.1);
+    color: var(--color-info);
+}
+.badge-status-warning {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: var(--color-warning);
+}
+.badge-status-danger {
+    background-color: var(--color-error-bg);
+    color: var(--color-error);
+}
 
 /* ============================================================
    TABLE
@@ -315,12 +328,12 @@ body {
 }
 
 .table-custom thead {
-    border-top: 1px solid  var(--color-surface-soft);
-    border-bottom: 1px solid  var(--color-surface-soft);
+    border-top: 1px solid var(--color-surface-soft);
+    border-bottom: 1px solid var(--color-surface-soft);
 }
 
-.table-custom thead th{
-    background-color:  var(--color-surface-soft);
+.table-custom thead th {
+    background-color: var(--color-surface-soft);
 }
 
 .table-custom thead th {
@@ -328,30 +341,29 @@ body {
     font-weight: 700;
     text-transform: uppercase;
     color: var(--color-text-muted);
-    letter-spacing: .03em;
+    letter-spacing: 0.03em;
     white-space: nowrap;
 }
 
-.table-custom tbody tr:hover > *{
+.table-custom tbody tr:hover > * {
     background: var(--color-hover) !important;
 }
 
 .table td,
-.table th{
-    padding:.90rem;
+.table th {
+    padding: 0.9rem;
 }
 
-.table-custom tbody td{
+.table-custom tbody td {
     font-size: 14px;
-       border-top:none;
-    border-bottom:1px solid #f1f5f9;
-
+    border-top: none;
+    border-bottom: 1px solid #f1f5f9;
 }
 
-.table-code{
-    font-size:.75rem;
-    font-weight:700;
-    color:var(--color-primary);
+.table-code {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-primary);
 }
 
 /* ============================================================
@@ -361,6 +373,16 @@ body {
     background-color: var(--color-primary-dark);
     color: var(--color-on-primary);
     border: none;
+}
+
+.btn-edit {
+    background-color: #ffc107;
+    color: var(--color-text);
+    border: none;
+}
+.btn-edit:hover {
+    background-color: #ffdf7e;
+    color: var(--color-text);
 }
 
 .btn-brand:hover {
@@ -384,16 +406,22 @@ body {
     background: none;
     border: none;
     font-size: 1.1rem;
-    transition: transform .15s ease;
+    transition: transform 0.15s ease;
 }
 
 .action-icon-btn:hover {
     transform: scale(1.15);
 }
 
-.action-icon-view   { color: var(--color-primary); }
-.action-icon-edit   { color: var(--color-warning); }
-.action-icon-delete { color: var(--color-error); }
+.action-icon-view {
+    color: var(--color-primary);
+}
+.action-icon-edit {
+    color: var(--color-warning);
+}
+.action-icon-delete {
+    color: var(--color-error);
+}
 
 /* ============================================================
    FORM INPUT PILL (input rounded penuh, dipake di form tambah user & search)
@@ -401,23 +429,23 @@ body {
 .form-control-pill {
     border-radius: 20px;
     border: 1px solid var(--color-outline-variant);
-    padding: 0.50rem 1rem;
+    padding: 0.5rem 1rem;
 }
 .search-control-pill {
     border-radius: var(--radius-pill);
     border: 1px var(--color-outline-variant);
-    padding: 0.50rem 1rem;
+    padding: 0.5rem 1rem;
 }
 
 .form-select-pill {
     border-radius: 20px;
     border: 1px solid var(--color-outline-variant);
-    padding: 0.50rem 1rem;
+    padding: 0.5rem 1rem;
 }
 .form-select-table-pill {
     border-radius: var(--radius-pill);
     border: 1px var(--color-outline-variant);
-    padding: 0.50rem 1rem;
+    padding: 0.5rem 1rem;
 }
 
 .form-control-pill:focus,
@@ -448,7 +476,7 @@ body {
     background-color: var(--color-outline-variant);
     border-radius: 9999px;
     cursor: pointer;
-    transition: background-color .2s ease;
+    transition: background-color 0.2s ease;
 }
 
 .toggle-switch-slider::before {
@@ -460,7 +488,7 @@ body {
     top: 2px;
     background-color: var(--color-surface);
     border-radius: 50%;
-    transition: transform .2s ease;
+    transition: transform 0.2s ease;
 }
 
 .toggle-switch-wrap input:checked + .toggle-switch-slider {
@@ -488,30 +516,39 @@ body {
 
 /* efek klik dari app.js */
 .is-pressed {
-    transform: scale(.95);
+    transform: scale(0.95);
 }
 
-/* ============================================================
-   RESPONSIVE - tablet & desktop aja (sesuai request, ga usah mobile kecil)
-   ============================================================ */
+
 @media (max-width: 991.98px) {
     :root {
         --sidebar-width: 220px;
     }
 
-    .sidebar-brand-title { font-size: 1rem; }
-    .app-main { padding: 1rem; }
+    .sidebar-brand-title {
+        font-size: 1rem;
+    }
+    .app-main {
+        padding: 1rem;
+    }
 }
 
 @media (max-width: 767.98px) {
     /* tablet portrait ke bawah: sidebar jadi icon-only biar konten ga kesempit */
-    .app-sidebar { width: 76px; }
-    .app-content-wrapper { margin-left: 76px; }
+    .app-sidebar {
+        width: 76px;
+    }
+    .app-content-wrapper {
+        margin-left: 76px;
+    }
     .sidebar-brand-subtitle,
     .sidebar-group-label,
     .sidebar-link span,
     .sidebar-group-toggle span,
-    .sidebar-group-toggle-icon { display: none; }
-    .sidebar-link { justify-content: center; }
+    .sidebar-group-toggle-icon {
+        display: none;
+    }
+    .sidebar-link {
+        justify-content: center;
+    }
 }
-

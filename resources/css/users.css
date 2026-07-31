@@ -1,0 +1,73 @@
+/* ============================================================
+   USER.CSS
+   Cuma dipake di halaman Manajemen User. Style yg umum
+   (form-control-pill, card, table, toggle) udah ada di app.css.
+   ============================================================ */
+
+/* search bar & filter role di atas tabel, background beda dikit dari card */
+.user-search-input {
+    background-color: var(--color-surface-alt);
+}
+
+
+/* titik indikator status aktif/nonaktif di tabel */
+.user-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.user-status-dot-active   { background-color: #10b981; }
+.user-status-dot-inactive { background-color: var(--color-outline); }
+
+
+
+/* ==========================================
+   PASSWORD INPUT
+========================================== */
+
+.input-icon-group{
+    position:relative;
+}
+
+.input-icon-group .input-icon{
+    position:absolute;
+    left:16px;
+    top:50%;
+    transform:translateY(-50%);
+    font-size:20px;
+    color:#94a3b8;
+    pointer-events:none;
+}
+
+.input-with-icon{
+    padding-left:48px !important;
+}
+
+.input-with-icon-right{
+    padding-right:52px !important;
+}
+
+.btn-toggle-password{
+    position:absolute;
+    top:50%;
+    right:14px;
+    transform:translateY(-50%);
+    border:none;
+    background:none;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    color:#94a3b8;
+    padding:0;
+}
+
+.btn-toggle-password:hover{
+    color:#0d6efd;
+}
+
+.btn-toggle-password .material-symbols-outlined{
+    font-size:21px;
+}
