@@ -8,45 +8,29 @@ use Illuminate\Http\RedirectResponse;
 
 class AuthController extends Controller
 {
-    public function showLogin()
-    {
+    public function showLogin() {
         return view('login');
     }
 
-    public function login(Request $request): RedirectResponse
-    {
+    public function login(Request $request): RedirectResponse {
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
-
             $request->session()->regenerate();
 
-            // Cek apakah akun aktif
-            if (!auth()->user()->isActive()) {
-
-                Auth::logout();
-
-                return back()->withErrors([
-                    'email' => 'Akun Anda telah dinonaktifkan.',
-                ])->onlyInput('email');
-            }
-
-            return redirect()
-                ->intended(route('dashboard'))
-                ->with('success', 'Login berhasil.');
+            return redirect()->intended(route('dashboard'))->with('success', 'login berhasil.');
         }
 
         return back()->withErrors([
-            'email' => 'Email atau password salah.',
+            'email' => 'email atau password salah.',
         ])->onlyInput('email');
     }
 
-    public function logout(Request $request): RedirectResponse
-    {
-        Auth::logout();
+    public function logout(Request $request): RedirectResponse {
+         Auth::logout();
 
         $request->session()->invalidate();
 
