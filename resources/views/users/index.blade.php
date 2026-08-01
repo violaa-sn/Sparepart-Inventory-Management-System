@@ -49,10 +49,11 @@
 
                 <div class="col-md-6 col-lg-4">
                     <label class="form-label text-uppercase small fw-semibold">Nama User</label>
-                    <input type="text" class="form-control form-control-pill" placeholder="nama" name="nama_user @error('nama_user') is-invalid @enderror"
-                        value="{{ old('nama_user') }}">
+                    <input type="text"
+                        class="form-control form-control-pill @error('nama_user') is-invalid @enderror"
+                        name="nama_user" value="{{ old('nama_user') }}">
 
-                        @error('nama_user')
+                    @error('nama_user')
                         <div class="invalid-feedback">
                             {{ $message }}
                         </div>
@@ -61,10 +62,10 @@
 
                 <div class="col-md-6 col-lg-4">
                     <label class="form-label text-uppercase small fw-semibold">Email</label>
-                    <input type="email" class="form-control form-control-pill" placeholder="nama@example.com @error('email') is-invalid @enderror"
-                        name="email" value="{{ old('email') }}">
+                    <input type="email" class="form-control form-control-pill @error('email') is-invalid @enderror"
+                        name="email" placeholder="nama@example.com" value="{{ old('email') }}">
 
-                @error('email')
+                    @error('email')
                         <div class="invalid-feedback">
                             {{ $message }}
                         </div>

@@ -4,6 +4,8 @@
 @import "./dashboard.css";
 @import "./users.css";
 @import "./user_detail.css";
+@import "./sparepart.css";
+@import "./transaksi.css";
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -534,7 +536,6 @@ body {
 }
 
 @media (max-width: 767.98px) {
-    /* tablet portrait ke bawah: sidebar jadi icon-only biar konten ga kesempit */
     .app-sidebar {
         width: 76px;
     }

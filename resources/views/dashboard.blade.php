@@ -25,7 +25,9 @@
                             <div class="stat-icon-box"><i class="bi bi-people"></i></div>
                             <div>
                                 <p class="stat-label">User</p>
-                                <p class="stat-value">0</p>
+                                <p class="stat-value">
+                                    {{ $totalUser }}
+                                </p>
                             </div>
                         </div>
                         <i class="bi bi-arrow-right stat-arrow"></i>
@@ -36,7 +38,9 @@
                             <div class="stat-icon-box"><i class="bi bi-tools"></i></div>
                             <div>
                                 <p class="stat-label">Sparepart</p>
-                                <p class="stat-value">0</p>
+                                <p class="stat-value">
+                                    {{ $totalSparepart }}
+                                </p>
                             </div>
                         </div>
                         <i class="bi bi-arrow-right stat-arrow"></i>
@@ -47,7 +51,9 @@
                             <div class="stat-icon-box"><i class="bi bi-building"></i></div>
                             <div>
                                 <p class="stat-label">Supplier</p>
-                                <p class="stat-value">0</p>
+                                <p class="stat-value">
+                                    {{ $totalSupplier }}
+                                </p>
                             </div>
                         </div>
                         <i class="bi bi-arrow-right stat-arrow"></i>
@@ -58,7 +64,9 @@
                             <div class="stat-icon-box"><i class="bi bi-arrow-left-right"></i></div>
                             <div>
                                 <p class="stat-label">Transaksi</p>
-                                <p class="stat-value">0</p>
+                                <p class="stat-value">
+                                    {{ $totalTransaksi }}
+                                </p>
                             </div>
                         </div>
                         <i class="bi bi-arrow-right stat-arrow"></i>
@@ -69,7 +77,9 @@
                             <div class="stat-icon-box"><i class="bi bi-box-arrow-in-down"></i></div>
                             <div>
                                 <p class="stat-label">Transaksi In</p>
-                                <p class="stat-value">0</p>
+                                <p class="stat-value">
+                                    {{ $totalBarangMasuk }}
+                                </p>
                             </div>
                         </div>
                         <i class="bi bi-arrow-right stat-arrow"></i>
@@ -80,7 +90,9 @@
                             <div class="stat-icon-box"><i class="bi bi-box-arrow-up"></i></div>
                             <div>
                                 <p class="stat-label">Transaksi Out</p>
-                                <p class="stat-value">0</p>
+                                <p class="stat-value">
+                                    {{ $totalBarangKeluar }}
+                                </p>
                             </div>
                         </div>
                         <i class="bi bi-arrow-right stat-arrow"></i>
@@ -90,6 +102,14 @@
 
             {{-- CHART TRANSAKSI IN VS OUT --}}
             <section class="card-surface card-surface-body flex-grow-1">
+
+                @php
+                    $maxChart = max(max($chartIn ?: [0]), max($chartOut ?: [0]));
+
+                    $maxChart = $maxChart > 0 ? $maxChart : 5;
+
+                    $step = ceil($maxChart / 5);
+                @endphp
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h4 class="section-title">Transaksi Out vs In</h4>
                     <div class="d-flex align-items-center gap-3">
@@ -106,55 +126,42 @@
 
                 <div class="chart-area">
                     <div class="chart-y-axis">
-                        <span>25</span>
-                        <span>20</span>
-                        <span>15</span>
-                        <span>10</span>
-                        <span>5</span>
-                        <span>0</span>
+
+                        @for ($i = 5; $i >= 0; $i--)
+                            <span>
+                                {{ $i * $step }}
+                            </span>
+                        @endfor
+
                     </div>
 
                     <div class="chart-plot">
                         {{-- tiap chart-bar-group = 1 hari, isinya bar out & in --}}
-                        <div class="chart-bar-group">
-                            <div class="chart-bar chart-bar-out" style="height: 60%"></div>
-                            <div class="chart-bar chart-bar-in" style="height: 85%"></div>
-                        </div>
-                        <div class="chart-bar-group">
-                            <div class="chart-bar chart-bar-out" style="height: 45%"></div>
-                            <div class="chart-bar chart-bar-in" style="height: 55%"></div>
-                        </div>
-                        <div class="chart-bar-group">
-                            <div class="chart-bar chart-bar-out" style="height: 70%"></div>
-                            <div class="chart-bar chart-bar-in" style="height: 40%"></div>
-                        </div>
-                        <div class="chart-bar-group">
-                            <div class="chart-bar chart-bar-out" style="height: 65%"></div>
-                            <div class="chart-bar chart-bar-in" style="height: 75%"></div>
-                        </div>
-                        <div class="chart-bar-group">
-                            <div class="chart-bar chart-bar-out" style="height: 50%"></div>
-                            <div class="chart-bar chart-bar-in" style="height: 70%"></div>
-                        </div>
-                        <div class="chart-bar-group">
-                            <div class="chart-bar chart-bar-out" style="height: 35%"></div>
-                            <div class="chart-bar chart-bar-in" style="height: 90%"></div>
-                        </div>
-                        <div class="chart-bar-group">
-                            <div class="chart-bar chart-bar-out" style="height: 55%"></div>
-                            <div class="chart-bar chart-bar-in" style="height: 65%"></div>
-                        </div>
+                        @foreach ($chartLabels as $index => $label)
+                            <div class="chart-bar-group">
+
+                                <div class="chart-bar chart-bar-out"
+                                    style="
+        height: {{ ($chartOut[$index] / $maxChart) * 100 }}%
+    ">
+                                </div>
+
+
+                                <div class="chart-bar chart-bar-in"
+                                    style="
+        height: {{ ($chartIn[$index] / $maxChart) * 100 }}%
+    ">
+                                </div>
+
+                            </div>
+                        @endforeach
                     </div>
                 </div>
 
                 <div class="chart-x-axis">
-                    <span>17 Sun</span>
-                    <span>18 Mon</span>
-                    <span>19 Tue</span>
-                    <span>20 Wed</span>
-                    <span>21 Thu</span>
-                    <span>22 Fri</span>
-                    <span>23 Sat</span>
+                    @foreach ($chartLabels as $label)
+                        <span>{{ $label }}</span>
+                    @endforeach
                 </div>
             </section>
         </div>
@@ -165,45 +172,54 @@
                 <h4 class="section-title mb-4">Low Stock Alert</h4>
 
                 <div class="d-flex flex-column gap-3">
-                    {{-- ulangi block ini per barang yg stoknya menipis --}}
-                    <div class="stock-alert-card">
-                        <div class="d-flex justify-content-between align-items-start mb-3">
-                            <div>
-                                <p class="stock-alert-name">Aki</p>
-                                <p class="stock-alert-id">ID SPAREPART</p>
-                            </div>
-                            <span class="stock-alert-count">Stock: 5</span>
-                        </div>
-                        <div class="stock-progress">
-                            <div class="stock-progress-bar" style="width: 100%"></div>
-                        </div>
-                    </div>
 
-                    <div class="stock-alert-card">
-                        <div class="d-flex justify-content-between align-items-start mb-3">
-                            <div>
-                                <p class="stock-alert-name">Filter Udara</p>
-                                <p class="stock-alert-id">ID SPAREPART</p>
-                            </div>
-                            <span class="stock-alert-count">Stock: 3</span>
-                        </div>
-                        <div class="stock-progress">
-                            <div class="stock-progress-bar" style="width: 60%"></div>
-                        </div>
-                    </div>
+                    @forelse($lowStock as $item)
+                        <div class="stock-alert-card">
 
-                    <div class="stock-alert-card">
-                        <div class="d-flex justify-content-between align-items-start mb-3">
-                            <div>
-                                <p class="stock-alert-name">Shock Absorber</p>
-                                <p class="stock-alert-id">ID SPAREPART</p>
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+
+                                <div>
+
+                                    <p class="stock-alert-name">
+                                        {{ $item->nama_sparepart }}
+                                    </p>
+
+                                    <p class="stock-alert-id">
+                                        {{ $item->kode_sparepart }}
+                                    </p>
+
+                                </div>
+
+
+                                <span class="stock-alert-count">
+
+                                    Stock: {{ $item->stok }}
+
+                                </span>
+
                             </div>
-                            <span class="stock-alert-count">Stock: 2</span>
+
+
+                            <div class="stock-progress">
+
+                                <div class="stock-progress-bar"
+                                    style="
+            width: {{ $item->min_stok > 0 ? ($item->stok / $item->min_stok) * 100 : 0 }}%">
+                                </div>
+
+                            </div>
+
                         </div>
-                        <div class="stock-progress">
-                            <div class="stock-progress-bar" style="width: 30%"></div>
-                        </div>
-                    </div>
+
+
+                    @empty
+
+                        <p class="text-muted">
+                            Semua stok aman
+                        </p>
+                    @endforelse
+
+
                 </div>
             </section>
         </div>
@@ -238,66 +254,105 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td class="fw-bold">TRX-000278323</td>
-                        <td>27 Jul 2026</td>
-                        <td>In</td>
-                        <td class="text-center">5</td>
-                        <td>Admin</td>
-                        <td><span class="badge-status badge-status-success">Selesai</span></td>
-                        <td class="text-center">
-                            <button type="button" class="action-icon-btn action-icon-view"><i class="bi bi-eye"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td class="fw-bold">TRX-000278323</td>
-                        <td>27 Jul 2026</td>
-                        <td>Out</td>
-                        <td class="text-center">10</td>
-                        <td>Staff</td>
-                        <td><span class="badge-status badge-status-success">Selesai</span></td>
-                        <td class="text-center">
-                            <button type="button" class="action-icon-btn action-icon-view"><i class="bi bi-eye"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td class="fw-bold">TRX-000278323</td>
-                        <td>27 Jul 2026</td>
-                        <td>In</td>
-                        <td class="text-center">40</td>
-                        <td>Staff</td>
-                        <td><span class="badge-status badge-status-success">Selesai</span></td>
-                        <td class="text-center">
-                            <button type="button" class="action-icon-btn action-icon-view"><i class="bi bi-eye"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td class="fw-bold">TRX-000278323</td>
-                        <td>26 Jul 2026</td>
-                        <td>In</td>
-                        <td class="text-center">60</td>
-                        <td>Manager</td>
-                        <td><span class="badge-status badge-status-danger">Dibatalkan</span></td>
-                        <td class="text-center">
-                            <button type="button" class="action-icon-btn action-icon-view"><i class="bi bi-eye"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td class="fw-bold">TRX-000278323</td>
-                        <td>26 Jul 2026</td>
-                        <td>In</td>
-                        <td class="text-center">60</td>
-                        <td>Manager</td>
-                        <td><span class="badge-status badge-status-danger">Dibatalkan</span></td>
-                        <td class="text-center">
-                            <button type="button" class="action-icon-btn action-icon-view"><i class="bi bi-eye"></i></button>
-                        </td>
-                    </tr>
+
+                    @forelse($recentActivity as $index => $transaksi)
+                        <tr>
+
+                            <td>
+                                {{ $index + 1 }}
+                            </td>
+
+
+                            <td class="fw-bold">
+                                {{ $transaksi->kode_transaksi }}
+                            </td>
+
+
+                            <td>
+                                {{ \Carbon\Carbon::parse($transaksi->tanggal_transaksi)->format('d M Y') }}
+                            </td>
+
+
+                            <td>
+
+                                @if ($transaksi->tipe == 'in')
+                                    <span>
+                                        In
+                                    </span>
+                                @else
+                                    <span>
+                                        Out
+                                    </span>
+                                @endif
+
+                            </td>
+
+
+                            <td class="text-center">
+
+                                {{ $transaksi->details->count() }}
+
+                            </td>
+
+
+                            <td>
+
+                                {{ $transaksi->user->name ?? '-' }}
+
+                            </td>
+
+
+                            <td>
+
+                                @if ($transaksi->status_transaksi == 'selesai')
+                                    <span class="badge-status badge-status-success">
+                                        Selesai
+                                    </span>
+                                @elseif($transaksi->status_transaksi == 'dibatalkan')
+                                    <span class="badge-status badge-status-danger">
+                                        Dibatalkan
+                                    </span>
+                                @else
+                                    <span class="badge-status">
+                                        {{ ucfirst($transaksi->status_transaksi) }}
+                                    </span>
+                                @endif
+
+
+                            </td>
+
+
+                            <td class="text-center">
+
+
+                                <button type="button" class="action-icon-btn action-icon-view">
+
+                                    <i class="bi bi-eye"></i>
+
+                                </button>
+
+
+                            </td>
+
+
+                        </tr>
+
+
+                    @empty
+
+
+                        <tr>
+
+                            <td colspan="8" class="text-center text-muted py-4">
+
+                                Belum ada transaksi
+
+                            </td>
+
+                        </tr>
+                    @endforelse
+
+
                 </tbody>
             </table>
         </div>

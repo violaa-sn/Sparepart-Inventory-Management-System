@@ -18,23 +18,16 @@ class KategoriController extends Controller
         $kategori = Kategori::withCount('spareparts')
 
             ->when($search, function ($query) use ($search) {
-
                 $query->where(function ($q) use ($search) {
-
                     $q->where('kode_kategori', 'like', "%{$search}%")
                         ->orWhere('nama_kategori', 'like', "%{$search}%");
                 });
             })
-
             ->when($status, function ($query) use ($status) {
-
                 $query->where('status_kategori', $status);
             })
-
             ->latest()
-
             ->paginate(10)
-
             ->withQueryString();
 
         $kodeKategori = Kategori::generateKode();

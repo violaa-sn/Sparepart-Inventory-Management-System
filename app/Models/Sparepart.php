@@ -41,13 +41,13 @@ class Sparepart extends Model
             Supplier::class,
             'supplier_spareparts'
         )
-        ->withPivot('harga_beli')
-        ->withTimestamps();
+            ->withPivot('harga_beli')
+            ->withTimestamps();
     }
 
-    public function stokTransaksis()
+    public function transaksiDetails()
     {
-        return $this->hasMany(StokTransaksi::class);
+        return $this->hasMany(StokTransaksiDetail::class);
     }
 
     public static function generateKode()

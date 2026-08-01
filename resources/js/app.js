@@ -4,6 +4,11 @@ import './login';
 import './kategori';
 import './brand';
 import './unit';
+import './supplier';
+import './sparepart';
+import TomSelect from "tom-select";
+import "tom-select/dist/css/tom-select.css";
+import './transaksi';
 
 import * as bootstrap from 'bootstrap';
 

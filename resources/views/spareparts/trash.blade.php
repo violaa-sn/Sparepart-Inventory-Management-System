@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Manajemen Sparepart - Sparepart Manager')
-@section('page-title', 'Manajemen Sparepart')
+@section('page-title', 'Trash Sparepart')
 
 
 @section('content')
@@ -37,32 +37,18 @@
 
         <div class="card-surface-header">
             <div class="d-flex justify-content-between align-items-center">
-                <h3 class="section-title mb-0">Daftar Sparepart</h3>
+                <h3 class="section-title mb-0">Daftar Trash Sparepart</h3>
                 <div class="d-flex align-items-center gap-2">
 
-                    <a href="{{ route('spareparts.trash') }}"
-                        class="btn btn-outline-danger btn-sm d-flex align-items-center gap-2 px-3">
-
-                        <i class="bi bi-trash3"></i>
-
-                        Trash Sparepart
-
+                    <a href="{{ route('spareparts.index') }}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i>
+                        Kembali
                     </a>
-
-                    <a href="{{ route('spareparts.create') }}"
-                        class="btn btn-brand btn-sm d-flex align-items-center gap-2 px-3">
-
-                        <i class="bi bi-plus-circle"></i>
-
-                        Tambah Sparepart
-
-                    </a>
-
                 </div>
             </div>
 
 
-            <form method="GET" action="{{ route('spareparts.index') }}">
+            <form method="GET" action="{{ route('spareparts.trash') }}">
                 <div class="row g-3 mt-3">
                     <div class="col-md-8">
                         <div class="position-relative">
@@ -161,21 +147,37 @@
                             </td>
                             <td>
                                 <div class="d-flex align-items-center justify-content-center gap-3">
-                                    <a href="{{ route('spareparts.show', $sparepart) }}"
+                                    <a href="{{ route('spareparts.trash.show', $sparepart) }}"
                                         class="action-icon-btn action-icon-view" title="Detail">
                                         <i class="bi bi-eye"></i>
                                     </a>
-                                    <a href="{{ route('spareparts.edit', $sparepart) }}"
-                                        class="action-icon-btn action-icon-edit" title="Edit">
-                                        <i class="bi bi-pencil"></i>
-                                    </a>
-                                    <form action="{{ route('spareparts.destroy', $sparepart) }}" method="POST">
+                                    {{-- Restore --}}
+                                    <form action="{{ route('spareparts.restore', $sparepart->id) }}" method="POST">
+
+                                        @csrf
+                                        @method('PATCH')
+
+                                        <button type="submit" class="btn btn-success btn-sm"
+                                            onclick="return confirm('Pulihkan sparepart ini?')">
+
+                                            <i class="bi bi-arrow-counterclockwise"></i>
+
+                                        </button>
+
+                                    </form>
+                                    {{-- Hapus Permanen --}}
+                                    <form action="{{ route('spareparts.force-delete', $sparepart->id) }}" method="POST">
+
                                         @csrf
                                         @method('DELETE')
-                                        <button class="action-icon-btn action-icon-delete" title="Delete"
-                                            onclick="return confirm('Hapus sparepart ini?')">
+
+                                        <button type="submit" class="btn btn-danger btn-sm"
+                                            onclick="return confirm('Sparepart akan dihapus permanen. Lanjutkan?')">
+
                                             <i class="bi bi-trash"></i>
+
                                         </button>
+
                                     </form>
                                 </div>
                             </td>

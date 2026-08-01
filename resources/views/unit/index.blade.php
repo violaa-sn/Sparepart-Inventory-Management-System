@@ -32,6 +32,12 @@
 
     <section class="card-surface">
         <div class="card-surface-header">
+            <div class="d-flex justify-content-between align-items-center">
+
+                <h3 class="section-title mb-0">
+                    Daftar Sparepart
+                </h3>
+            </div>
             <form method="GET" action="{{ route('unit.index') }}">
                 <div class="row g-3 mt-3">
                     <div class="col-md-8">
