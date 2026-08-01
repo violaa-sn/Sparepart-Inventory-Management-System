@@ -6,28 +6,32 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('sparepart_suppliers', function (Blueprint $table) {
+        Schema::create('supplier_spareparts', function (Blueprint $table) {
+
             $table->id();
+
             $table->foreignId('supplier_id')
-                ->constrained();
+                ->constrained()
+                ->cascadeOnUpdate()
+                ->restrictOnDelete();
+
             $table->foreignId('sparepart_id')
-                ->constrained();
+                ->constrained()
+                ->cascadeOnUpdate()
+                ->restrictOnDelete();
+
             $table->decimal('harga_beli', 15, 2);
+
             $table->timestamps();
+
             $table->unique(['supplier_id', 'sparepart_id']);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('sparepart_suppliers');
+        Schema::dropIfExists('supplier_spareparts');
     }
 };
