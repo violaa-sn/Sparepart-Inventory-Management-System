@@ -3,40 +3,32 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Barang;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
 
 class Kategori extends Model
 {
-      protected $fillable = ['nama_kategori', 'status_kategori'];
-
     use SoftDeletes;
 
-    public function barang() {
-        return $this->hasMany(Barang::class);
+    protected $fillable = [
+        'kode_kategori',
+        'nama_kategori',
+        'status_kategori'
+    ];
+
+    public function spareparts() {
+        return $this->hasMany(Sparepart::class);
     }
 
-   protected static function boot()
-   {
-    parent::boot();
+    public static function generateKode()
+    {
+        $last = self::withTrashed()
+            ->latest('id')
+            ->first();
 
-    static::creating(function ($kategori) {
+        $number = $last
+            ? intval(substr($last->kode_kategori, 3)) + 1
+            : 1;
 
-        $inisial = collect(explode(' ', $kategori->nama_kategori))
-            ->map(function ($kata) {
-                return strtoupper(substr($kata, 0, 1));
-            })
-            ->join('');
-
-            $tanggal = now()->format('dmy');
-
-        $lastKategori = Kategori::withTrashed()->latest('id')->first();
-
-        $counter = $lastKategori ? $lastKategori->id + 1 : 1;
-
-        $kategori->kode_kategori =
-            'KAT' . $inisial . $tanggal. str_pad($counter, 3, '0', STR_PAD_LEFT);
-    });
+        return 'KTG' . str_pad($number, 4, '0', STR_PAD_LEFT);
     }
 }

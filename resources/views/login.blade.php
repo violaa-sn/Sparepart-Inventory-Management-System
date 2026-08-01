@@ -64,12 +64,12 @@
                                     value="{{ old('email') }}" id="email" name="email"
                                     placeholder="nama@gmail.com" required>
 
-                                    @error('email')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
+                            </div>
+                            @error('email')
+                                <div class="invalid-feedback d-block">
+                                    {{ $message }}
                                 </div>
+                            @enderror
                         </div>
 
                         <!-- Input Password -->
@@ -86,12 +86,12 @@
                                     <span class="material-symbols-outlined" id="iconTogglePassword">visibility</span>
                                 </button>
 
-                                @error('password')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
                             </div>
+                            @error('password')
+                                <div class="invalid-feedback d-block">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
 
                         <!-- Checkbox Ingat Saya -->

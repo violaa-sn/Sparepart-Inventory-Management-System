@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\Sparepart;
+use App\Models\Supplier;
+use App\Models\StokTransaksi;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -10,198 +14,134 @@ class DashboardController extends Controller
     {
 
         // ==========================
-        // Dummy Total Data
+        // TOTAL DATA CARD
         // ==========================
-        $stats = [
+        
 
-            [
-                'label' => 'Total Sparepart',
-                'value' => 120,
-                'icon' => 'inventory_2',
-                'href' => '#'
-            ],
+        $totalUser = User::count();
 
-            [
-                'label' => 'Kategori',
-                'value' => 15,
-                'icon' => 'category',
-                'href' => '#'
-            ],
+        $totalSparepart = Sparepart::count();
 
-            [
-                'label' => 'Supplier',
-                'value' => 20,
-                'icon' => 'local_shipping',
-                'href' => '#'
-            ],
+        $totalSupplier = Supplier::count();
 
-            [
-                'label' => 'Barang Masuk',
-                'value' => 350,
-                'icon' => 'move_to_inbox',
-                'href' => '#'
-            ],
+        $totalTransaksi = StokTransaksi::count();
 
-            [
-                'label' => 'Barang Keluar',
-                'value' => 280,
-                'icon' => 'outbox',
-                'href' => '#'
-            ],
 
-            [
-                'label' => 'User',
-                'value' => 8,
-                'icon' => 'group',
-                'href' => '#'
-            ],
+        $totalBarangMasuk = StokTransaksi::where('tipe', 'in')
+            ->count();
 
-        ];
+
+        $totalBarangKeluar = StokTransaksi::where('tipe', 'out')
+            ->count();
 
 
 
         // ==========================
-        // Dummy Chart Mingguan
+        // LOW STOCK ALERT
+        // stok <= minimal stok
         // ==========================
-        $weeklyChart = [
 
-            [
-                'label' => 'Sen',
-                'in_pct' => 80,
-                'out_pct' => 50
-            ],
-
-            [
-                'label' => 'Sel',
-                'in_pct' => 60,
-                'out_pct' => 70
-            ],
-
-            [
-                'label' => 'Rab',
-                'in_pct' => 90,
-                'out_pct' => 40
-            ],
-
-            [
-                'label' => 'Kam',
-                'in_pct' => 50,
-                'out_pct' => 80
-            ],
-
-            [
-                'label' => 'Jum',
-                'in_pct' => 70,
-                'out_pct' => 60
-            ],
-
-            [
-                'label' => 'Sab',
-                'in_pct' => 40,
-                'out_pct' => 30
-            ],
-
-            [
-                'label' => 'Min',
-                'in_pct' => 85,
-                'out_pct' => 55
-            ],
-
-        ];
+        $lowStock = Sparepart::whereColumn(
+                'stok',
+                '<=',
+                'min_stok'
+            )
+            ->orderBy('stok', 'asc')
+            ->limit(5)
+            ->get();
 
 
 
         // ==========================
-        // Dummy Low Stock
+        // RECENT ACTIVITY
         // ==========================
 
-        $lowStockItems = collect([
-
-            (object)[
-                'name' => 'Kampas Rem',
-                'code' => 'SPR-001',
-                'current_stock' => 5,
-                'min_stock' => 20,
-                'percent' => 25
-            ],
-
-
-            (object)[
-                'name' => 'Filter Oli',
-                'code' => 'SPR-002',
-                'current_stock' => 8,
-                'min_stock' => 30,
-                'percent' => 27
-            ],
-
-
-            (object)[
-                'name' => 'Busi Motor',
-                'code' => 'SPR-003',
-                'current_stock' => 3,
-                'min_stock' => 15,
-                'percent' => 20
-            ],
-
-
-        ]);
+        $recentActivity = StokTransaksi::with([
+                'user',
+                'details'
+            ])
+            ->latest('tanggal_transaksi')
+            ->limit(5)
+            ->get();
 
 
 
         // ==========================
-        // Dummy Recent Transaction
+        // CHART TRANSAKSI 7 HARI
         // ==========================
 
-        $recentTransactions = collect([
+        $chartLabels = [];
 
-            (object)[
-                'code' => 'TRX-IN-001',
-                'date' => now(),
-                'type' => 'in',
-                'total_items' => 25,
-                'status' => 'success',
+        $chartIn = [];
 
-                'user' => (object)[
-                    'name' => 'Admin Gudang'
-                ]
-            ],
+        $chartOut = [];
 
 
-            (object)[
-                'code' => 'TRX-OUT-002',
-                'date' => now()->subDay(),
-                'type' => 'out',
-                'total_items' => 10,
-                'status' => 'success',
-
-                'user' => (object)[
-                    'name' => 'Manager'
-                ]
-            ],
+        for ($i = 6; $i >= 0; $i--) {
 
 
-            (object)[
-                'code' => 'TRX-IN-003',
-                'date' => now()->subDays(2),
-                'type' => 'in',
-                'total_items' => 40,
-                'status' => 'pending',
-
-                'user' => (object)[
-                    'name' => 'Staff Gudang'
-                ]
-            ],
-
-
-        ]);
+            $tanggal = Carbon::now()
+                ->subDays($i);
 
 
 
-        return view('dashboard', compact(
-            'stats',
-            'weeklyChart',
-            'lowStockItems',
-            'recentTransactions'
-        ));
+            // label tanggal
+            // contoh: 27 Jul
+            $chartLabels[] = $tanggal->format('d M');
+
+
+
+            // jumlah transaksi masuk hari tersebut
+
+            $chartIn[] = StokTransaksi::where('tipe', 'in')
+                ->whereDate(
+                    'tanggal_transaksi',
+                    $tanggal->format('Y-m-d')
+                )
+                ->count();
+
+
+
+            // jumlah transaksi keluar hari tersebut
+
+            $chartOut[] = StokTransaksi::where('tipe', 'out')
+                ->whereDate(
+                    'tanggal_transaksi',
+                    $tanggal->format('Y-m-d')
+                )
+                ->count();
+
+        }
+
+
+
+        return view(
+            'dashboard',
+            compact(
+
+                'totalUser',
+
+                'totalSparepart',
+
+                'totalSupplier',
+
+                'totalTransaksi',
+
+                'totalBarangMasuk',
+
+                'totalBarangKeluar',
+
+                'lowStock',
+
+                'recentActivity',
+
+                'chartLabels',
+
+                'chartIn',
+
+                'chartOut'
+
+            )
+        );
     }
 }

@@ -16,11 +16,22 @@ class UserController extends Controller
                 ->orWhere('nama_user', 'like', "%{$keyword}%")
                 ->orWhere('email', 'like', "%{$keyword}%");
         })
+            ->when($request->role, function ($query) use ($request) {
+                $query->where('role', $request->role);
+            })
+
             ->latest()
             ->paginate(10)
             ->withQueryString();
 
-        return view('users.index', compact('users'));
+        $kodeUser = User::generateKode();
+
+        return view('users.index', compact('users', 'kodeUser'));
+    }
+
+    public function show(User $user)
+    {
+        return view('users.show', compact('user'));
     }
 
     public function store(Request $request)
@@ -31,7 +42,7 @@ class UserController extends Controller
             'nomor_telepon' => 'required|unique:users,nomor_telepon',
             'password' => 'required|confirmed|min:8',
             'role' => 'required|in:manager,admin,staff',
-            'status_user' => 'required|in:aktif,nonaktif'
+            'status_user' => 'nullable'
         ]);
 
         $data['status_user'] =
@@ -56,8 +67,18 @@ class UserController extends Controller
             'nama_user' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'nomor_telepon' => 'required|unique:users,nomor_telepon,' . $user->id,
-            'password' => 'nullable|min:8|confirmed'
+            'password' => 'nullable|min:8|confirmed',
+            'role' => 'required|in:manager,admin,staff',
+            'status_user' => 'nullable'
         ]);
+
+        if (empty($data['password'])) {
+            unset($data['password']);
+        }
+
+        $data['status_user'] = $request->has('status_user')
+            ? 'aktif'
+            : 'nonaktif';
 
         $user->update($data);
 
@@ -65,9 +86,24 @@ class UserController extends Controller
             ->with('success', 'users berhasil diperbarui');
     }
 
+    public function toggleStatus(User $user)
+    {
+        $user->status_user =
+            $user->status_user == 'aktif'
+            ? 'nonaktif'
+            : 'aktif';
+
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            'status' => $user->status_user
+        ]);
+    }
+
     public function destroy(User $user)
     {
-        if ($user->stok_transaksi()->exists()) {
+        if ($user->stokTransaksis()->exists()) {
             return back()->with(
                 'error',
                 'user masih digunakan oleh transaksi sehingga tidak dapat dihapus.'
@@ -88,8 +124,9 @@ class UserController extends Controller
         return view('users.trash', compact('user'));
     }
 
-    public function restore(User $user)
+    public function restore($id)
     {
+        $user = User::onlyTrashed()->findOrFail($id);
         $user->restore();
 
         return redirect()->route('users.trash')
@@ -98,14 +135,14 @@ class UserController extends Controller
 
     public function forceDelete($id)
     {
-        if ($user->stokTransaksis()->exists()) {
+        $user = User::onlyTrashed()->findOrFail($id);
 
+        if ($user->stokTransaksis()->exists()) {
             return back()->with(
                 'error',
                 'User memiliki riwayat transaksi.'
             );
         }
-        $user = User::onlyTrashed()->findOrFail($id);
 
         $user->forceDelete();
 

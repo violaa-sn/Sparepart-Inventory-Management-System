@@ -1,0 +1,55 @@
+
+.transaksi-tabs .nav-link {
+    color: var(--color-text-muted);
+    font-weight: 500;
+    font-size: 14px;
+    border: none;
+    border-bottom: 2px solid transparent;
+}
+
+.transaksi-tabs .nav-link.active,
+.transaksi-tabs .nav-link:hover {
+    color: var(--color-brand);
+    border-bottom-color: var(--color-brand);
+    background: none;
+}
+
+/* --- box ringkasan Total Item / Total Qty / Grand Total --- */
+.transaction-summary {
+    background-color: var(--color-surface-alt);
+    border: 1px solid var(--color-outline-variant);
+    border-radius: var(--radius-card);
+    padding: 1rem 1.25rem;
+    width: 100%;
+    max-width: 320px;
+}
+
+/* --- garis putus-putus, dipakai di Card 2 sebelum tombol Tambah Item --- */
+.border-dashed {
+    border-style: dashed !important;
+}
+
+/* --- warna teks brand, buat kode transaksi & tombol link --- */
+.text-brand {
+    color: var(--color-brand);
+}
+
+/* =========================================================
+   OVERRIDE TOM SELECT biar nyatu sama gaya form-select-pill
+   ========================================================= */
+.ts-wrapper.single .ts-control {
+    border-radius: 14px;
+    border-color: var(--color-outline-variant);
+    padding: 0.6rem 1rem;
+}
+
+.ts-wrapper.single.focus .ts-control {
+    border-color: var(--color-brand);
+    box-shadow: 0 0 0 0.15rem rgba(75, 121, 131, 0.25);
+}
+
+.ts-dropdown {
+    border-radius: 14px;
+    border-color: var(--color-outline-variant);
+    overflow: hidden;
+}
