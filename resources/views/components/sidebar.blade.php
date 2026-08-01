@@ -18,15 +18,10 @@
         {{-- Master Data --}}
         <p class="sidebar-group-label">Master Data</p>
 
-        @if (auth()->user()->role === 'manager')
-            <a href="{{ route('users.index') }}"
-                class="sidebar-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
-
-                <i class="bi bi-person"></i>
-                <span>User</span>
-
-            </a>
-        @endif
+        <a href="{{ route('users.index') }}" class="sidebar-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
+            <i class="bi bi-person"></i>
+            <span>User</span>
+        </a>
 
         <a href="{{ route('kategori.index') }}"
             class="sidebar-link {{ request()->routeIs('kategori.*') ? 'active' : '' }}">
@@ -34,19 +29,14 @@
             <span>Kategori</span>
         </a>
 
-        <a href="{{ route('brand.index') }}" class="sidebar-link {{ request()->routeIs('brand.*') ? 'active' : '' }}">
-            <i class="bi bi-bookmark-star"></i>
+        <a href="{{ route('brands.index') }}" class="sidebar-link {{ request()->routeIs('brands.*') ? 'active' : '' }}">
+            <i class="bi bi-award"></i>
             <span>Brand</span>
         </a>
 
-        <a href="{{ route('unit.index') }}" class="sidebar-link {{ request()->routeIs('unit.*') ? 'active' : '' }}">
-            <i class="bi bi-rulers"></i>
-            <span>Unit</span>
-        </a>
-
-        <a href="{{ route('supplier.index') }}"
-            class="sidebar-link {{ request()->routeIs('supplier.*') ? 'active' : '' }}">
-            <i class="bi bi-truck"></i>
+        <a href="{{ route('suppliers.index') }}"
+            class="sidebar-link {{ request()->routeIs('suppliers.*') ? 'active' : '' }}">
+            <i class="bi bi-building"></i>
             <span>Supplier</span>
         </a>
 
@@ -57,39 +47,33 @@
         </a>
 
         {{-- Transaksi --}}
-        <button class="sidebar-group-toggle {{ request()->routeIs('transaksi.*') ? '' : 'collapsed' }}" type="button"
-            data-bs-toggle="collapse" data-bs-target="#menuTransaksi">
+        <button class="sidebar-group-toggle {{ request()->routeIs('transactions.*') ? '' : 'collapsed' }}"
+            type="button" data-bs-toggle="collapse" data-bs-target="#menuTransaksi"
+            aria-expanded="{{ request()->routeIs('transactions.*') ? 'true' : 'false' }}">
 
             <span>Transaksi</span>
 
             <i class="bi bi-chevron-down sidebar-group-toggle-icon"></i>
-
         </button>
 
-        <div class="collapse {{ request()->routeIs('transaksi.*') ? 'show' : '' }}" id="menuTransaksi">
+        <div class="collapse {{ request()->routeIs('transactions.*') ? 'show' : '' }}" id="menuTransaksi">
 
-            <a href="{{ route('transaksi.barang-masuk') }}"
-                class="sidebar-link sidebar-link-sub {{ request()->routeIs('transaksi.barang-masuk') ? 'active' : '' }}">
-
+            <a href="{{ route('transactions.in') }}"
+                class="sidebar-link sidebar-link-sub {{ request()->routeIs('transactions.in') ? 'active' : '' }}">
                 <i class="bi bi-box-arrow-in-down"></i>
                 <span>Barang Masuk</span>
-
             </a>
 
-            <a href="{{ route('transaksi.barang-keluar') }}"
-                class="sidebar-link sidebar-link-sub {{ request()->routeIs('transaksi.barang-keluar') ? 'active' : '' }}">
-
+            <a href="{{ route('transactions.out') }}"
+                class="sidebar-link sidebar-link-sub {{ request()->routeIs('transactions.out') ? 'active' : '' }}">
                 <i class="bi bi-box-arrow-up"></i>
                 <span>Barang Keluar</span>
-
             </a>
 
-            <a href="{{ route('transaksi.riwayat') }}"
-                class="sidebar-link sidebar-link-sub {{ request()->routeIs('transaksi.riwayat') ? 'active' : '' }}">
-
+            <a href="{{ route('transactions.history') }}"
+                class="sidebar-link sidebar-link-sub {{ request()->routeIs('transactions.history') ? 'active' : '' }}">
                 <i class="bi bi-clock-history"></i>
-                <span>Riwayat Transaksi</span>
-
+                <span>Riwayat</span>
             </a>
 
         </div>

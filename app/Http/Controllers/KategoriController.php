@@ -12,27 +12,22 @@ class KategoriController extends Controller
      */
     public function index(Request $request)
     {
+        $kategori = Kategori::withCount('barang')
+            ->latest()
+            ->paginate(10);
+
         $search = $request->search;
-        $status = $request->status;
 
-        $kategori = Kategori::withCount('spareparts')
-
+        $kategori = Kategori::withCount('barang')
             ->when($search, function ($query) use ($search) {
-                $query->where(function ($q) use ($search) {
-                    $q->where('kode_kategori', 'like', "%{$search}%")
-                        ->orWhere('nama_kategori', 'like', "%{$search}%");
-                });
-            })
-            ->when($status, function ($query) use ($status) {
-                $query->where('status_kategori', $status);
+
+                $query->where('nama_kategori', 'like', "%{$search}%");
             })
             ->latest()
             ->paginate(10)
             ->withQueryString();
 
-        $kodeKategori = Kategori::generateKode();
-
-        return view('kategori.index', compact('kategori', 'kodeKategori'));
+        return view('kategori.index', compact('kategori'));
     }
 
     /**
@@ -40,9 +35,7 @@ class KategoriController extends Controller
      */
     public function create()
     {
-        $kodeKategori = Kategori::generateKode();
-
-        return view('kategori.create', compact('kodeKategori'));
+        return view('kategori.create');
     }
 
     /**
@@ -50,22 +43,13 @@ class KategoriController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'nama_kategori' => 'required|string|max:100',
-            'status_kategori' => 'nullable'
+        $request->validate([
+            'nama_kategori' => 'required|string|max:100'
         ]);
 
-        $data['kode_kategori'] = Kategori::generateKode();
+        Kategori::create($request->all());
 
-        $data['status_kategori'] =
-            $request->has('status_kategori')
-            ? 'aktif'
-            : 'nonaktif';
-
-        Kategori::create($data);
-
-        return redirect()
-            ->route('kategori.index')
+        return redirect()->route('kategori.index')
             ->with('success', 'Kategori berhasil ditambahkan.');
     }
 
@@ -90,85 +74,40 @@ class KategoriController extends Controller
      */
     public function update(Request $request, Kategori $kategori)
     {
-        $data = $request->validate([
-            'nama_kategori' => 'required|string|max:100',
-            'status_kategori' => 'nullable'
+        $request->validate([
+            'nama_kategori' => 'required|string|max:100'
         ]);
 
-        $data['status_kategori'] = $request->has('status_kategori')
-            ? 'aktif'
-            : 'nonaktif';
+        $kategori->update($request->all());
 
-        $kategori->update($data);
-
-        return redirect()
-            ->route('kategori.index')
+        return redirect()->route('kategori.index')
             ->with('success', 'Kategori berhasil diperbarui.');
-    }
-
-    public function toggleStatus(Kategori $kategori)
-    {
-        $kategori->status_kategori =
-            $kategori->status_kategori == 'aktif'
-            ? 'nonaktif'
-            : 'aktif';
-
-        $kategori->save();
-
-        return response()->json([
-
-            'success' => true,
-            'status' => $kategori->status_kategori
-
-        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Kategori $kategori)
-    {
-        if ($kategori->spareparts()->exists()) {
-
-            return back()->with(
-                'error',
-                'Kategori masih digunakan oleh sparepart.'
-            );
-        }
-
-        $kategori->delete();
-
+   public function destroy(Kategori $kategori)
+   {
+    if ($kategori->barang()->exists()) {
         return back()->with(
-            'success',
-            'Kategori berhasil dihapus.'
+            'error',
+            'Kategori masih digunakan oleh barang sehingga tidak dapat dihapus.'
         );
     }
 
-    public function trash(Request $request)
+    $kategori->delete();
+
+    return back()->with('success', 'Kategori berhasil dihapus.');
+    }
+
+    public function trash()
     {
-        $search = $request->search;
-        $status = $request->status;
-
         $kategori = Kategori::onlyTrashed()
-            ->withCount('spareparts')
-            ->when($search, function ($query) use ($search) {
-                $query->where(function ($q) use ($search) {
-                    $q->where('kode_kategori', 'like', "%{$search}%")
-                        ->orWhere('nama_kategori', 'like', "%{$search}%");
-                });
-            })
-
-            ->when($status, function ($query) use ($status) {
-                $query->where('status_kategori', $status);
-            })
             ->latest()
-            ->paginate(10)
-            ->withQueryString();
+            ->paginate(10);
 
-        return view(
-            'kategori.trash',
-            compact('kategori')
-        );
+        return view('kategori.trash', compact('kategori'));
     }
 
     public function restore($id)
@@ -183,23 +122,11 @@ class KategoriController extends Controller
 
     public function forceDelete($id)
     {
-        $kategori = Kategori::onlyTrashed()
-            ->findOrFail($id);
-
-        if ($kategori->spareparts()->withTrashed()->exists()) {
-            return back()->with(
-                'error',
-                'Kategori masih memiliki relasi sparepart.'
-            );
-        }
+        $kategori = Kategori::onlyTrashed()->findOrFail($id);
 
         $kategori->forceDelete();
 
-        return redirect()
-            ->route('kategori.trash')
-            ->with(
-                'success',
-                'Kategori berhasil dihapus permanen.'
-            );
+        return redirect()->route('kategori.trash')
+            ->with('success', 'Kategori berhasil dihapus permanen.');
     }
 }

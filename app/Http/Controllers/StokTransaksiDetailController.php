@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Unit;
+use App\Models\StokTransaksiDetail;
 use Illuminate\Http\Request;
 
-class UnitController extends Controller
+class StokTransaksiDetailController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +34,7 @@ class UnitController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Unit $unit)
+    public function show(StokTransaksiDetail $stokTransaksiDetail)
     {
         //
     }
@@ -42,7 +42,7 @@ class UnitController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Unit $unit)
+    public function edit(StokTransaksiDetail $stokTransaksiDetail)
     {
         //
     }
@@ -50,7 +50,7 @@ class UnitController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Unit $unit)
+    public function update(Request $request, StokTransaksiDetail $stokTransaksiDetail)
     {
         //
     }
@@ -58,7 +58,7 @@ class UnitController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Unit $unit)
+    public function destroy(StokTransaksiDetail $stokTransaksiDetail)
     {
         //
     }
