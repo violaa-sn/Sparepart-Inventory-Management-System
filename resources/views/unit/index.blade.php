@@ -102,7 +102,7 @@
                             <td>
                                 <div class="d-flex justify-content-center align-items-center gap-3">
                                     <label class="toggle-switch-wrap toggle-sm">
-                                        <input type="checkbox" class="js-unit-status-toggle" data-id="{{ $item->id }}"
+                                        <input type="checkbox" class="js-unit-status-toggle" data-id="{{ $item->id }}" onclick="return confirm('Yakin ingin mengubah status unit?')"
                                             {{ $item->status_unit == 'aktif' ? 'checked' : '' }}>
 
                                         <span class="toggle-switch-slider"></span>

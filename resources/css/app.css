@@ -19,13 +19,6 @@
         "Noto Color Emoji";
 }
 
-/* ============================================================
-   APP.CSS
-   Isinya class2 yg dipake berulang di banyak halaman:
-   sidebar, topbar, card putih, badge status, table, tombol, dll.
-   Kalau ada style yg cuma dipake di 1 halaman aja, taro di
-   css halaman itu sendiri (dashboard.css / user.css), JANGAN taro sini.
-   ============================================================ */
 
 :root {
     --color-primary: #31606a;
@@ -57,10 +50,29 @@
     --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
+
 body {
     font-family: "Inter";
     background-color: var(--color-bg);
     color: var(--color-text);
+}
+
+#tambahKategori {
+    --bs-offcanvas-width: 480px;
+}
+#tambahUser {
+    --bs-offcanvas-width: 620px;
+}
+#tambahSupplier {
+    --bs-offcanvas-width: 610px;
+}
+
+.offcanvas-header {
+    border-bottom: 1px solid var(--color-border);
+}
+
+.offcanvas-body {
+    padding: 1.7rem;
 }
 
 /* ============================================================
@@ -368,6 +380,13 @@ body {
     color: var(--color-primary);
 }
 
+.form-label-login {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    margin-bottom: 0.5rem;
+}
+
 /* ============================================================
    TOMBOL
    ============================================================ */
@@ -425,13 +444,13 @@ body {
     color: var(--color-error);
 }
 
-/* ============================================================
-   FORM INPUT PILL (input rounded penuh, dipake di form tambah user & search)
-   ============================================================ */
 .form-control-pill {
-    border-radius: 20px;
-    border: 1px solid var(--color-outline-variant);
+    border-radius: 8px;
+    border: 1.5px solid var(--color-outline-variant);
     padding: 0.5rem 1rem;
+    height: 2.4rem;
+    font-size: 16px;
+    margin: 0;
 }
 .search-control-pill {
     border-radius: var(--radius-pill);
@@ -440,9 +459,11 @@ body {
 }
 
 .form-select-pill {
-    border-radius: 20px;
+    border-radius: 8px;
     border: 1px solid var(--color-outline-variant);
     padding: 0.5rem 1rem;
+    height: 2.5rem;
+    font-size: 16px;
 }
 .form-select-table-pill {
     border-radius: var(--radius-pill);
@@ -520,7 +541,6 @@ body {
 .is-pressed {
     transform: scale(0.95);
 }
-
 
 @media (max-width: 991.98px) {
     :root {

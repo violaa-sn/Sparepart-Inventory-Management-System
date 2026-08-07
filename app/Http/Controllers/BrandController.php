@@ -58,8 +58,7 @@ class BrandController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'nama_brand' => 'required|string|max:100',
-            'status_brand' => 'nullable'
+            'nama_brand' => 'required|string|max:100'
         ]);
 
         $data['kode_brand'] = Brand::generateKode();
@@ -98,8 +97,7 @@ class BrandController extends Controller
     public function update(Request $request, Brand $brand)
     {
         $data = $request->validate([
-            'nama_brand' => 'required|string|max:100',
-            'status_brand' => 'nullable'
+            'nama_brand' => 'required|string|max:100'
         ]);
 
         $data['status_brand'] = $request->has('status_brand')

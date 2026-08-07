@@ -179,7 +179,6 @@
                             <div class="d-flex justify-content-between align-items-start mb-3">
 
                                 <div>
-
                                     <p class="stock-alert-name">
                                         {{ $item->nama_sparepart }}
                                     </p>
@@ -187,24 +186,29 @@
                                     <p class="stock-alert-id">
                                         {{ $item->kode_sparepart }}
                                     </p>
-
                                 </div>
 
-
-                                <span class="stock-alert-count">
-
-                                    Stock: {{ $item->stok }}
-
-                                </span>
+                                @if ($item->stok == 0)
+                                    <span class="badge-status badge-status-danger">
+                                        Stok Habis
+                                    </span>
+                                @else
+                                    <span class="badge-status badge-status-warning">
+                                        Low Stock
+                                    </span>
+                                @endif
 
                             </div>
 
 
+                            <span class="stock-alert-count">
+
+                                Stock: {{ $item->stok }} / {{ $item->min_stok }}
+                            </span>
                             <div class="stock-progress">
 
                                 <div class="stock-progress-bar"
-                                    style="
-            width: {{ $item->min_stok > 0 ? ($item->stok / $item->min_stok) * 100 : 0 }}%">
+                                    style="width: {{ min(($item->stok / $item->min_stok) * 100, 100) }}%">
                                 </div>
 
                             </div>
@@ -212,17 +216,21 @@
                         </div>
 
 
-                    @empty
-
-                        <p class="text-muted">
-                            Semua stok aman
-                        </p>
-                    @endforelse
 
 
                 </div>
-            </section>
+
+
+            @empty
+
+                <p class="text-muted">
+                    Semua stok aman
+                </p>
+                @endforelse
+
+
         </div>
+        </section>
     </div>
 
     {{-- RECENT ACTIVITY --}}
@@ -230,12 +238,14 @@
         <div class="card-surface-header d-flex justify-content-between align-items-center">
             <h4 class="section-title">Recent Activity</h4>
             <div class="d-flex gap-2">
-                <button type="button" class="btn btn-accent d-flex align-items-center gap-2 px-3">
+                <a href="{{ route('transaksi.barang-masuk.create') }}" type="button"
+                    class="btn btn-accent d-flex align-items-center gap-2 px-3 js-disable-link">
                     <i class="bi bi-plus-lg"></i> Transaksi In
-                </button>
-                <button type="button" class="btn btn-brand d-flex align-items-center gap-2 px-3">
+                </a>
+                <a href="{{ route('transaksi.barang-keluar.create') }}" type="button"
+                    class="btn btn-brand d-flex align-items-center gap-2 px-3 js-disable-link">
                     <i class="bi bi-plus-lg"></i> Transaksi Out
-                </button>
+                </a>
             </div>
         </div>
 
@@ -272,19 +282,16 @@
                                 {{ \Carbon\Carbon::parse($transaksi->tanggal_transaksi)->format('d M Y') }}
                             </td>
 
-
                             <td>
-
                                 @if ($transaksi->tipe == 'in')
-                                    <span>
+                                    <span class="badge-status badge-status-success">
                                         In
                                     </span>
                                 @else
-                                    <span>
+                                    <span class="badge-status badge-status-warning">
                                         Out
                                     </span>
                                 @endif
-
                             </td>
 
 
@@ -297,7 +304,7 @@
 
                             <td>
 
-                                {{ $transaksi->user->name ?? '-' }}
+                                {{ $transaksi->user->nama_user ?? '-' }}
 
                             </td>
 
@@ -324,13 +331,17 @@
 
                             <td class="text-center">
 
-
-                                <button type="button" class="action-icon-btn action-icon-view">
-
-                                    <i class="bi bi-eye"></i>
-
-                                </button>
-
+                                @if ($transaksi->tipe == 'in')
+                                    <a href="{{ route('transaksi.barang-masuk.show', $transaksi) }}"
+                                        class="action-icon-btn action-icon-view js-disable-link" title="Detail">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                @else
+                                    <a href="{{ route('transaksi.barang-keluar.show', $transaksi) }}"
+                                        class="action-icon-btn action-icon-view js-disable-link" title="Detail">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                @endif
 
                             </td>
 
@@ -355,19 +366,6 @@
 
                 </tbody>
             </table>
-        </div>
-
-        <div class="card-surface-header d-flex justify-content-between align-items-center border-top">
-            <p class="small text-muted mb-0">Showing 1 to 5 of 24 entries</p>
-            <nav aria-label="Pagination recent activity">
-                <ul class="pagination pagination-sm mb-0">
-                    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                </ul>
-            </nav>
         </div>
     </section>
 

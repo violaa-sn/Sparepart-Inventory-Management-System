@@ -15,6 +15,7 @@ class StokTransaksiController extends Controller
     // halaman daftar barang masuk
     public function barangMasuk(Request $request)
     {
+
         $search = $request->search;
         $status = $request->status;
         $tanggalAwal = $request->tanggal_awal;
@@ -27,6 +28,10 @@ class StokTransaksiController extends Controller
         ])
             ->where('tipe', 'in');
 
+        if (auth()->user()->role == 'staff') {
+            $query->where('user_id', auth()->id());
+        }
+
         $query->when($search, function ($query) use ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('kode_transaksi', 'like', "%{$search}%")
@@ -36,9 +41,12 @@ class StokTransaksiController extends Controller
             });
         });
 
-        $query->when($status, function ($query) use ($status) {
-            $query->where('status_transaksi', $status);
-        });
+        $query->when(
+            $status && $status != 'all',
+            function ($query) use ($status) {
+                $query->where('status_transaksi', $status);
+            }
+        );
 
         $query->when($tanggalAwal && $tanggalAkhir, function ($query) use ($tanggalAwal, $tanggalAkhir) {
             $query->whereBetween(
@@ -46,6 +54,7 @@ class StokTransaksiController extends Controller
                 [$tanggalAwal, $tanggalAkhir]
             );
         });
+
 
         $transaksis = $query
             ->latest('tanggal_transaksi')
@@ -64,9 +73,11 @@ class StokTransaksiController extends Controller
             ->orderBy('nama_supplier')
             ->get();
 
+        $kode_transaksi = 'TRX-IN-' . now()->format('YmdHis');
+
         return view(
             'transaksi.barang-masuk.create',
-            compact('suppliers')
+            compact('suppliers', 'kode_transaksi')
         );
     }
 
@@ -124,6 +135,8 @@ class StokTransaksiController extends Controller
                 'tanggal_transaksi' => $request->tanggal_transaksi,
                 'status_transaksi' => 'selesai',
                 'catatan' => $request->catatan
+
+
             ]);
 
 
@@ -271,6 +284,7 @@ class StokTransaksiController extends Controller
     // halaman daftar barang keluar
     public function barangKeluar(Request $request)
     {
+
         $search = $request->search;
         $status = $request->status;
         $tanggalAwal = $request->tanggal_awal;
@@ -283,27 +297,32 @@ class StokTransaksiController extends Controller
         ])
             ->where('tipe', 'out');
 
+        if (auth()->user()->role == 'staff') {
+            $query->where('user_id', auth()->id());
+        }
+
 
         $query->when($search, function ($query) use ($search) {
 
             $query->where(function ($q) use ($search) {
 
-                $q->where(
-                    'kode_transaksi',
-                    'like',
-                    "%{$search}%"
-                );
+                $q->where('kode_transaksi', 'LIKE', "%{$search}%")
+
+                    ->orWhereHas('user', function ($user) use ($search) {
+
+                        $user->where('nama', 'LIKE', "%{$search}%");
+                    });
             });
         });
 
 
-        $query->when($status, function ($query) use ($status) {
+        $query->when(
+            $status && $status != 'all',
+            function ($query) use ($status) {
 
-            $query->where(
-                'status_transaksi',
-                $status
-            );
-        });
+                $query->where('status_transaksi', $status);
+            }
+        );
 
 
         $query->when(
@@ -339,9 +358,10 @@ class StokTransaksiController extends Controller
             ->orderBy('nama_sparepart')
             ->get();
 
+        $kode_transaksi = 'TRX-OUT-' . now()->format('YmdHis');
         return view(
             'transaksi.barang-keluar.create',
-            compact('spareparts')
+            compact('spareparts', 'kode_transaksi')
         );
     }
 
@@ -502,9 +522,12 @@ class StokTransaksiController extends Controller
 
     public function showBarangKeluar(StokTransaksi $transaksi)
     {
+
         $transaksi->load([
             'user',
-            'details.sparepart'
+            'details.sparepart.kategori',
+            'details.sparepart.brand',
+            'details.sparepart.unit',
         ]);
 
 
@@ -521,5 +544,100 @@ class StokTransaksiController extends Controller
     }
 
     // riwayat semua transaksi
-    public function riwayat() {}
+    public function riwayat(Request $request)
+    {
+        $search = $request->search;
+        $status = $request->status;
+        $tipe = $request->tipe;
+        $tanggalAwal = $request->tanggal_awal;
+        $tanggalAkhir = $request->tanggal_akhir;
+
+        $query = StokTransaksi::with([
+            'supplier',
+            'user',
+            'details.sparepart'
+        ]);
+
+        // staff hanya melihat transaksi miliknya
+        if (auth()->user()->role == 'staff') {
+            $query->where('user_id', auth()->id());
+        }
+
+        /*
+    |-------------------------------------------------------
+    | SEARCH
+    |-------------------------------------------------------
+    */
+
+        $query->when($search, function ($query) use ($search) {
+
+            $query->where(function ($q) use ($search) {
+
+                $q->where('kode_transaksi', 'like', "%{$search}%")
+
+                    ->orWhereHas('supplier', function ($supplier) use ($search) {
+                        $supplier->where('nama_supplier', 'like', "%{$search}%");
+                    })
+
+                    ->orWhereHas('user', function ($user) use ($search) {
+                        $user->where('nama_user', 'like', "%{$search}%");
+                    })
+
+                    ->orWhereHas('details.sparepart', function ($sparepart) use ($search) {
+                        $sparepart
+                            ->where('nama_sparepart', 'like', "%{$search}%")
+                            ->orWhere('kode_sparepart', 'like', "%{$search}%");
+                    });
+            });
+        });
+
+        /*
+    |-------------------------------------------------------
+    | FILTER TIPE
+    |-------------------------------------------------------
+    */
+
+        $query->when(
+            $tipe && $tipe != 'all',
+            fn($q) => $q->where('tipe', $tipe)
+        );
+
+        /*
+    |-------------------------------------------------------
+    | FILTER STATUS
+    |-------------------------------------------------------
+    */
+
+        $query->when(
+            $status && $status != 'all',
+            fn($q) => $q->where('status_transaksi', $status)
+        );
+
+        /*
+    |-------------------------------------------------------
+    | FILTER TANGGAL
+    |-------------------------------------------------------
+    */
+
+        $query->when(
+            $tanggalAwal && $tanggalAkhir,
+            function ($q) use ($tanggalAwal, $tanggalAkhir) {
+
+                $q->whereBetween(
+                    'tanggal_transaksi',
+                    [$tanggalAwal, $tanggalAkhir]
+                );
+            }
+        );
+
+        $transaksis = $query
+            ->latest('tanggal_transaksi')
+            ->paginate(10)
+            ->withQueryString();
+
+        return view(
+            'transaksi.riwayat.index',
+            compact('transaksis')
+        );
+    }
 }

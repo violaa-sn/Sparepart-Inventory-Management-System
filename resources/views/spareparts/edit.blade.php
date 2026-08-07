@@ -12,7 +12,7 @@
             <div class="card-surface-header d-flex justify-content-between align-items-center">
                 <h2 class="section-title mb-0">Edit Sparepart</h2>
 
-                <a href="{{ route('spareparts.index') }}" class="btn btn-outline-secondary">
+                <a href="{{ route('spareparts.index') }}" class="btn btn-outline-secondary js-disable-link">
                     <i class="bi bi-arrow-left"></i>
                     Kembali
                 </a>
@@ -161,12 +161,11 @@
                                 </div>
 
                                 <div class="col-12 col-md-2 d-flex justify-content-md-center">
-                                    <form action="{{ route('spareparts.destroy', $sparepart) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
+
                                     <button type="button" class="btn-hapus-supplier" {{ $loop->first ? 'disabled' : '' }}>
                                         <i class="bi bi-trash"></i>
                                     </button>
+
                                 </div>
 
                             </div>

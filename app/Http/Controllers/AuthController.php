@@ -29,9 +29,9 @@ class AuthController extends Controller
 
                 Auth::logout();
 
-                return back()->withErrors([
-                    'email' => 'Akun Anda telah dinonaktifkan.',
-                ])->onlyInput('email');
+                return back()
+                    ->with('error', 'Akun Anda telah dinonaktifkan.')
+                    ->onlyInput('email');
             }
 
             return redirect()
@@ -39,9 +39,9 @@ class AuthController extends Controller
                 ->with('success', 'Login berhasil.');
         }
 
-        return back()->withErrors([
-            'email' => 'Email atau password salah.',
-        ])->onlyInput('email');
+        return back()
+            ->with('error', 'Email atau password salah.')
+            ->onlyInput('email');
     }
 
     public function logout(Request $request): RedirectResponse

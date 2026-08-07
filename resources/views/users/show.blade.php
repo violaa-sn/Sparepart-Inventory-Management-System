@@ -102,7 +102,7 @@
 
                 <div class="mt-4 d-flex justify-content-end">
 
-                    <a href="{{ route('users.index') }}" class="btn btn-outline-secondary">
+                    <a href="{{ route('users.index') }}" class="btn btn-outline-secondary js-disable-link">
                         <i class="bi bi-arrow-left"></i>
                         Kembali
                     </a>

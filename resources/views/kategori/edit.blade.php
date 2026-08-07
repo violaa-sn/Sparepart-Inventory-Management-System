@@ -12,7 +12,7 @@
                 <div class="card-surface-header d-flex justify-content-between align-items-center">
                     <h2 class="section-title mb-0">Edit Kategori</h2>
 
-                    <a href="{{ route('kategori.index') }}" class="btn btn-outline-secondary">
+                    <a href="{{ route('kategori.index') }}" class="btn btn-outline-secondary js-disable-link">
                         <i class="bi bi-arrow-left"></i>
                         Kembali
                     </a>
@@ -64,7 +64,7 @@
 
                     <div class="mt-4 d-flex justify-content-end gap-2">
 
-                        <a href="{{ route('kategori.index') }}" class="btn btn-outline-danger px-4">
+                        <a href="{{ route('kategori.index') }}" class="btn btn-outline-danger px-4 js-disable-link">
                             Batal
                         </a>
 

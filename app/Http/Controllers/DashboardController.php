@@ -16,7 +16,7 @@ class DashboardController extends Controller
         // ==========================
         // TOTAL DATA CARD
         // ==========================
-        
+
 
         $totalUser = User::count();
 
@@ -41,12 +41,9 @@ class DashboardController extends Controller
         // stok <= minimal stok
         // ==========================
 
-        $lowStock = Sparepart::whereColumn(
-                'stok',
-                '<=',
-                'min_stok'
-            )
-            ->orderBy('stok', 'asc')
+        $lowStock = Sparepart::where('stok', '>', 0)
+            ->whereColumn('stok', '<=', 'min_stok')
+            ->orderBy('stok')
             ->limit(5)
             ->get();
 
@@ -56,14 +53,19 @@ class DashboardController extends Controller
         // RECENT ACTIVITY
         // ==========================
 
-        $recentActivity = StokTransaksi::with([
-                'user',
-                'details'
-            ])
-            ->latest('tanggal_transaksi')
-            ->limit(5)
-            ->get();
+        $query = StokTransaksi::with([
+            'user',
+            'details'
+        ]);
 
+        if (auth()->user()->role == 'staff') {
+            $query->where('user_id', auth()->id());
+        }
+
+        $recentActivity = $query
+            ->orderByDesc('created_at')
+            ->take(5)
+            ->get();
 
 
         // ==========================
@@ -110,7 +112,6 @@ class DashboardController extends Controller
                     $tanggal->format('Y-m-d')
                 )
                 ->count();
-
         }
 
 

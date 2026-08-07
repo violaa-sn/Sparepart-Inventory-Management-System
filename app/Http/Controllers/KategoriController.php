@@ -132,7 +132,7 @@ class KategoriController extends Controller
 
             return back()->with(
                 'error',
-                'Kategori masih digunakan oleh sparepart.'
+                'Kategori masih ada relasi.'
             );
         }
 
@@ -185,13 +185,6 @@ class KategoriController extends Controller
     {
         $kategori = Kategori::onlyTrashed()
             ->findOrFail($id);
-
-        if ($kategori->spareparts()->withTrashed()->exists()) {
-            return back()->with(
-                'error',
-                'Kategori masih memiliki relasi sparepart.'
-            );
-        }
 
         $kategori->forceDelete();
 

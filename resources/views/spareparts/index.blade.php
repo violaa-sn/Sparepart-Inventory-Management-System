@@ -37,24 +37,24 @@
 
         <div class="card-surface-header">
             <div class="d-flex justify-content-between align-items-center">
-                <h3 class="section-title mb-0">Daftar Sparepart</h3>
+                <h3 class="section-title mb-0">Sparepart</h3>
                 <div class="d-flex align-items-center gap-2">
 
                     <a href="{{ route('spareparts.trash') }}"
-                        class="btn btn-outline-danger btn-sm d-flex align-items-center gap-2 px-3">
+                        class="btn btn-outline-danger btn-sm d-flex align-items-center gap-2 px-3 js-disable-link">
 
                         <i class="bi bi-trash3"></i>
 
-                        Trash Sparepart
+                        Trash 
 
                     </a>
 
                     <a href="{{ route('spareparts.create') }}"
-                        class="btn btn-brand btn-sm d-flex align-items-center gap-2 px-3">
+                        class="btn btn-brand btn-sm d-flex align-items-center gap-2 px-3 js-disable-link">
 
                         <i class="bi bi-plus-circle"></i>
 
-                        Tambah Sparepart
+                        Tambah 
 
                     </a>
 
@@ -162,11 +162,11 @@
                             <td>
                                 <div class="d-flex align-items-center justify-content-center gap-3">
                                     <a href="{{ route('spareparts.show', $sparepart) }}"
-                                        class="action-icon-btn action-icon-view" title="Detail">
+                                        class="action-icon-btn action-icon-view js-disable-link" title="Detail">
                                         <i class="bi bi-eye"></i>
                                     </a>
                                     <a href="{{ route('spareparts.edit', $sparepart) }}"
-                                        class="action-icon-btn action-icon-edit" title="Edit">
+                                        class="action-icon-btn action-icon-edit js-disable-link" title="Edit">
                                         <i class="bi bi-pencil"></i>
                                     </a>
                                     <form action="{{ route('spareparts.destroy', $sparepart) }}" method="POST">

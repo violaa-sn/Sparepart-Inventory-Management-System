@@ -32,6 +32,7 @@
 /* --- warna teks brand, buat kode transaksi & tombol link --- */
 .text-brand {
     color: var(--color-brand);
+    font-size: 14px;
 }
 
 /* =========================================================
@@ -52,4 +53,19 @@
     border-radius: 14px;
     border-color: var(--color-outline-variant);
     overflow: hidden;
+}
+
+.card-surface-accent {
+    position: relative;
+    overflow: hidden;
+}
+
+.card-surface-accent::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-color: var(--color-brand);
 }

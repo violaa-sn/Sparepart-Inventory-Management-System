@@ -16,7 +16,7 @@
 
                     <h2 class="h5 mb-0">Transaksi Barang Masuk</h2>
                     <a href="{{ route('transaksi.barang-masuk') }}"
-                        class="btn btn-outline-secondary d-flex align-items-center gap-2">
+                        class="btn btn-outline-secondary d-flex align-items-center gap-2 js-disable-link">
                         <i class="bi bi-arrow-left"></i> Kembali
                     </a>
                 </div>
@@ -26,18 +26,18 @@
 
                     <div class="col-12 col-md-6">
                         <label class="form-label">Kode Transaksi</label>
-                        <input type="text" class="form-control form-control-pill" value="Otomatis oleh sistem" readonly>
+                        <input type="text" class="form-control form-control-pill" value="{{ $kode_transaksi }}" readonly>
                     </div>
 
                     <div class="col-12 col-md-6">
                         <label class="form-label">Tanggal Transaksi <span class="text-danger">*</span></label>
                         <input type="datetime-local" name="tanggal_transaksi" class="form-control form-control-pill"
-                            required>
+                            value="{{ old('tanggal_transaksi', now()->format('Y-m-d\TH:i')) }}">
                     </div>
 
                     <div class="col-12 col-md-6">
                         <label class="form-label">Supplier <span class="text-danger">*</span></label>
-                        <select name="supplier_id" id="supplier-select" class="form-select form-select-pill" required>
+                        <select name="supplier_id" id="supplier-select" required>
                             <option value="">Pilih Supplier</option>
                             @foreach ($suppliers as $supplier)
                                 <option value="{{ $supplier->id }}">
@@ -69,7 +69,7 @@
 
                 <div class="mb-4">
                     <label class="form-label">Cari Sparepart</label>
-                    <select id="sparepart-select" class="form-select form-select-pill" disabled>
+                    <select id="sparepart-select" disabled>
                         <option value="">Pilih supplier dulu...</option>
                     </select>
                 </div>
@@ -166,7 +166,7 @@
 
         {{-- Tombol aksi bawah --}}
         <div class="d-flex justify-content-end gap-2">
-            <a href="{{ route('transaksi.barang-masuk') }}" class="btn btn-outline-secondary">
+            <a href="{{ route('transaksi.barang-masuk') }}" class="btn btn-outline-secondary js-disable-link">
                 Batal
             </a>
 

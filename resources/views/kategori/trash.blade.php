@@ -36,7 +36,7 @@
                 <h3 class="section-title mb-0">Daftar Kategori Trash</h3>
                 <div class="d-flex align-items-center gap-2">
 
-                    <a href="{{ route('kategori.index') }}" class="btn btn-outline-secondary">
+                    <a href="{{ route('kategori.index') }}" class="btn btn-outline-secondary js-disable-link">
                         <i class="bi bi-arrow-left"></i>
                         Kembali
                     </a>

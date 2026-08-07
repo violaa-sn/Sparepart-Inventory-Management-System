@@ -153,7 +153,7 @@
 
                     <div class="mt-4 d-flex justify-content-end gap-2">
 
-                        <a href="{{ route('users.index') }}" class="btn btn-outline-danger px-4">
+                        <a href="{{ route('users.index') }}" class="btn btn-outline-danger px-4 js-disable-link">
 
                             Batal
                         </a>

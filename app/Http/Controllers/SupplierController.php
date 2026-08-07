@@ -51,8 +51,7 @@ class SupplierController extends Controller
         $data = $request->validate([
             'nama_supplier'    => 'required|string|max:100',
             'alamat'  => 'required|string|max:255',
-            'notlp' => 'required|string|max:20',
-            'status_supplier'  => 'nullable',
+            'notlp' => 'required|string|max:13',
             'email' => 'required|email|unique:suppliers,email',
         ]);
 
@@ -94,8 +93,7 @@ class SupplierController extends Controller
         $data = $request->validate([
             'nama_supplier'    => 'required|string|max:100',
             'alamat'  => 'required|string|max:255',
-            'notlp' => 'required|string|max:20',
-            'status_supplier'  => 'nullable',
+            'notlp' => 'required|string|max:13',
             'email' => 'required|email|unique:suppliers,email,' . $supplier->id
         ]);
 
@@ -197,20 +195,6 @@ class SupplierController extends Controller
     {
         $supplier = Supplier::onlyTrashed()
             ->findOrFail($id);
-
-        if ($supplier->stokTransaksis()->exists()) {
-            return back()->with(
-                'error',
-                'Supplier memiliki riwayat transaksi.'
-            );
-        }
-
-        if ($supplier->spareparts()->withTrashed()->exists()) {
-            return back()->with(
-                'error',
-                'Supplier masih memiliki relasi sparepart.'
-            );
-        }
 
         $supplier->forceDelete();
 

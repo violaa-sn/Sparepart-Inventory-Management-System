@@ -15,7 +15,7 @@
             </h2>
 
             <a href="{{ route('transaksi.barang-masuk') }}"
-                class="btn btn-outline-secondary d-flex align-items-center gap-2">
+                class="btn btn-outline-secondary d-flex align-items-center gap-2 js-disable-link">
 
                 <i class="bi bi-arrow-left"></i>
                 Kembali

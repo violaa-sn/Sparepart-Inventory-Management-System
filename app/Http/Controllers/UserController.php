@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -14,7 +15,8 @@ class UserController extends Controller
         $users = User::when($keyword, function ($query) use ($keyword) {
             $query->where('kode_user', 'like', "%{$keyword}%")
                 ->orWhere('nama_user', 'like', "%{$keyword}%")
-                ->orWhere('email', 'like', "%{$keyword}%");
+                ->orWhere('email', 'like', "%{$keyword}%")
+                ->orWhere('nomor_telepon', 'like', "%{$keyword}%");
         })
             ->when($request->role, function ($query) use ($request) {
                 $query->where('role', $request->role);
@@ -37,12 +39,11 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $data =  $request->validate([
-            'nama_user' => 'required|max:100',
+            'nama_user' => 'required|string|max:100',
             'email' => 'required|email|unique:users,email',
-            'nomor_telepon' => 'required|unique:users,nomor_telepon',
+            'nomor_telepon' => 'required|string|max:13|unique:users,nomor_telepon',
             'password' => 'required|confirmed|min:8',
-            'role' => 'required|in:manager,admin,staff',
-            'status_user' => 'nullable'
+            'role' => 'required|in:manager,admin,staff'
         ]);
 
         $data['status_user'] =
@@ -64,12 +65,11 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $data = $request->validate([
-            'nama_user' => 'required|string|max:255',
+            'nama_user' => 'required|string|max:100',
             'email' => 'required|email|unique:users,email,' . $user->id,
-            'nomor_telepon' => 'required|unique:users,nomor_telepon,' . $user->id,
+            'nomor_telepon' => 'required|string|max:13|unique:users,nomor_telepon,' . $user->id,
             'password' => 'nullable|min:8|confirmed',
-            'role' => 'required|in:manager,admin,staff',
-            'status_user' => 'nullable'
+            'role' => 'required|in:manager,admin,staff'
         ]);
 
         if (empty($data['password'])) {
@@ -88,6 +88,13 @@ class UserController extends Controller
 
     public function toggleStatus(User $user)
     {
+        if (Auth::id() === $user->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda tidak dapat menonaktifkan akun yang sedang digunakan.'
+            ], 403);
+        }
+
         $user->status_user =
             $user->status_user == 'aktif'
             ? 'nonaktif'
@@ -115,13 +122,33 @@ class UserController extends Controller
         return back()->with('success', 'user berhasil dihapus.');
     }
 
-    public function trash()
+    public function trash(Request $request)
     {
-        $user = User::onlyTrashed()
-            ->latest()
-            ->paginate(10);
+        $search = $request->search;
+        $status = $request->status;
 
-        return view('users.trash', compact('user'));
+        $users = User::onlyTrashed()
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('kode_user', 'like', "%{$search}%")
+                        ->orWhere('nama_user', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%")
+                        ->orWhere('nomor_telepon', 'like', "%{$search}%");
+                });
+            })
+
+            ->when($request->role, function ($query) use ($request) {
+                $query->where('role', $request->role);
+            })
+
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+
+        return view(
+            'users.trash',
+            compact('users')
+        );
     }
 
     public function restore($id)
@@ -136,13 +163,6 @@ class UserController extends Controller
     public function forceDelete($id)
     {
         $user = User::onlyTrashed()->findOrFail($id);
-
-        if ($user->stokTransaksis()->exists()) {
-            return back()->with(
-                'error',
-                'User memiliki riwayat transaksi.'
-            );
-        }
 
         $user->forceDelete();
 

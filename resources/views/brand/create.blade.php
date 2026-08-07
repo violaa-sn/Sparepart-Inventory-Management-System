@@ -7,10 +7,13 @@
 
     <section class="card-surface">
 
-        <div class="card-surface-header">
-            <h2 class="section-title">
-                Tambah Brand Baru
-            </h2>
+        <div class="card-surface-header d-flex justify-content-between align-items-center">
+            <h2 class="section-title mb-0">Tambah Kategori</h2>
+
+            <a href="{{ route('kategori.index') }}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i>
+                Kembali
+            </a>
         </div>
 
 

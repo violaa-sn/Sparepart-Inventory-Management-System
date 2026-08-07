@@ -22,6 +22,26 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // =====================================================
+// HELPER PESAN ERROR (dipakai bareng di masuk & keluar)
+// =====================================================
+
+function tampilkanError(pesan) {
+    const pesanError = document.getElementById("pesan-error-item");
+    if (!pesanError) return;
+
+    pesanError.textContent = pesan;
+    pesanError.classList.remove("d-none");
+}
+
+function sembunyikanError() {
+    const pesanError = document.getElementById("pesan-error-item");
+    if (!pesanError) return;
+
+    pesanError.classList.add("d-none");
+    pesanError.textContent = "";
+}
+
+// =====================================================
 // BARANG MASUK
 // =====================================================
 
@@ -70,6 +90,8 @@ function initBarangMasuk() {
         qty.value = "";
         subtotal.textContent = "Rp 0";
 
+        sembunyikanError();
+
         if (!supplierId) return;
 
         fetch(`/transaksi/barang-masuk/supplier/${supplierId}/spareparts`)
@@ -99,6 +121,8 @@ function initBarangMasuk() {
     });
 
     sparepartTom.on("change", () => {
+        sembunyikanError();
+
         const id = sparepartTom.getValue();
 
         const item = sparepartTom.options[id];
@@ -124,20 +148,34 @@ function initBarangMasuk() {
         subtotal.textContent = "Rp " + total.toLocaleString("id-ID");
     }
 
+    // cek apakah sparepart ini udah pernah ditambahin ke daftar item
+    function sudahAdaDiDaftar(sparepartId) {
+        return items.some((item) => item.id == sparepartId);
+    }
+
     btnTambah.addEventListener("click", () => {
+        sembunyikanError();
+
         const id = sparepartTom.getValue();
 
         const item = sparepartTom.options[id];
 
         if (!item) {
-            alert("Pilih sparepart");
-
+            tampilkanError("Pilih sparepart terlebih dahulu.");
             return;
         }
 
         if (!qty.value || qty.value <= 0) {
-            alert("Qty harus diisi");
+            tampilkanError("Qty harus diisi.");
+            return;
+        }
 
+        // ini bagian yang tadinya belum ada - cegah sparepart yang sama
+        // ditambahin dua kali sebagai baris terpisah
+        if (sudahAdaDiDaftar(item.value)) {
+            tampilkanError(
+                "Sparepart ini sudah ada di daftar item. Hapus baris yang lama dulu kalau mau ubah qty atau harganya.",
+            );
             return;
         }
 
@@ -154,6 +192,12 @@ function initBarangMasuk() {
 
             subtotal: Number(harga.value) * Number(qty.value),
         });
+
+        // nonaktifkan option yang sudah dipilih
+        sparepartTom.removeOption(id);
+
+        // refresh dropdown
+        sparepartTom.refreshOptions(false);
 
         renderTable();
 
@@ -277,11 +321,19 @@ function initBarangKeluar() {
 
     let items = [];
 
+    // ambil qty yang udah kepake sparepart ini di daftar item (kalau ada)
+    function qtyYangSudahDiambil(sparepartId) {
+        const existing = items.find((i) => i.id == sparepartId);
+        return existing ? existing.qty : 0;
+    }
+
     // =========================
     // PILIH SPAREPART
     // =========================
 
     sparepartTom.on("change", () => {
+        sembunyikanError();
+
         const id = sparepartTom.getValue();
 
         const item = sparepartTom.options[id];
@@ -311,7 +363,11 @@ function initBarangKeluar() {
 
         if (!item) return;
 
-        const hasil = item.stok - Number(qty.value || 0);
+        // sisa stok yang beneran tersedia, dikurangin qty yang
+        // udah "dijatah" ke sparepart ini di daftar item sebelumnya
+        const stokTersisaUntukInput =
+            item.stok - qtyYangSudahDiambil(item.value);
+        const hasil = stokTersisaUntukInput - Number(qty.value || 0);
 
         if (hasil < 0) {
             sisa.textContent = "Stok tidak cukup";
@@ -325,27 +381,34 @@ function initBarangKeluar() {
     // =========================
 
     btnTambah.addEventListener("click", () => {
+        sembunyikanError();
+
         const id = sparepartTom.getValue();
 
         const item = sparepartTom.options[id];
 
         if (!item) {
-            alert("Pilih sparepart terlebih dahulu");
-
+            tampilkanError("Pilih sparepart terlebih dahulu.");
             return;
         }
 
         if (!qty.value || qty.value <= 0) {
-            alert("Qty keluar harus diisi");
-
+            tampilkanError("Qty keluar harus diisi.");
             return;
         }
 
         const jumlah = Number(qty.value);
 
-        if (jumlah > item.stok) {
-            alert("Qty melebihi stok tersedia");
+        // ini bagian yang diperbaiki: validasi stok sekarang ngitung
+        // sisa stok yang beneran ada, bukan cuma ngebandingin ke
+        // stok awal doang (biar ga kebablasan kalau sparepart yang
+        // sama ditambah lagi berkali-kali)
+        const stokTersisa = item.stok - qtyYangSudahDiambil(item.value);
 
+        if (jumlah > stokTersisa) {
+            tampilkanError(
+                `Qty melebihi stok tersedia. Sisa stok untuk sparepart ini: ${stokTersisa} pcs.`,
+            );
             return;
         }
 
@@ -369,6 +432,8 @@ function initBarangKeluar() {
 
                 sisa: item.stok - jumlah,
             });
+            sparepartTom.removeOption(item.value);
+            sparepartTom.refreshOptions(false);
         }
 
         renderTable();

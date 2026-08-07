@@ -99,7 +99,7 @@
 
                     </div>
 
-                    <a href="{{ route('spareparts.index') }}" class="btn btn-outline-secondary">
+                    <a href="{{ route('spareparts.index') }}" class="btn btn-outline-secondary js-disable-link">
                         <i class="bi bi-arrow-left"></i>
                         Kembali
                     </a>
@@ -168,7 +168,7 @@
 
                     </form>
 
-                    <a href="{{ route('spareparts.edit', $sparepart) }}" class="btn btn-brand">
+                    <a href="{{ route('spareparts.edit', $sparepart) }}" class="btn btn-warning js-disable-link">
                         Edit Sparepart
                     </a>
 
@@ -260,15 +260,59 @@
 
                 <tbody>
 
-                    <tr>
+                    @forelse($sparepart->transaksiDetails as $detail)
+                        <tr>
 
-                        <td colspan="5" class="text-center text-muted py-5">
+                            <td>
+                                {{ \Carbon\Carbon::parse($detail->transaksi->tanggal_transaksi)->format('d M Y') }}
+                            </td>
 
-                            Belum ada transaksi untuk sparepart ini.
+                            <td>
+                                @if ($detail->transaksi->tipe == 'in')
+                                    <span class="badge-status badge-status-info">
+                                        Barang Masuk
+                                    </span>
+                                @else
+                                    <span class="badge-status badge-status-warning">
+                                        Barang Keluar
+                                    </span>
+                                @endif
+                            </td>
 
-                        </td>
+                            <td class="text-end fw-semibold">
+                                {{ $detail->qty }}
+                            </td>
 
-                    </tr>
+                            <td>
+                                {{ $detail->transaksi->user->nama_user ?? '-' }}
+                            </td>
+
+                            <td>
+                                @if ($detail->transaksi->status_transaksi == 'selesai')
+                                    <span class="badge-status badge-status-success">
+                                        Selesai
+                                    </span>
+                                @elseif($detail->transaksi->status_transaksi == 'dibatalkan')
+                                    <span class="badge-status badge-status-danger">
+                                        Dibatalkan
+                                    </span>
+                                @else
+                                    <span class="badge-status">
+                                        {{ ucfirst($detail->transaksi->status_transaksi) }}
+                                    </span>
+                                @endif
+                            </td>
+
+                        </tr>
+
+                    @empty
+
+                        <tr>
+                            <td colspan="5" class="text-center text-muted py-5">
+                                Belum ada transaksi untuk sparepart ini.
+                            </td>
+                        </tr>
+                    @endforelse
 
                 </tbody>
 

@@ -37,7 +37,7 @@
                 <div class="d-flex align-items-center gap-2">
 
                     <a href="{{ route('brand.trash') }}"
-                        class="btn btn-outline-danger btn-sm d-flex align-items-center gap-2 px-3">
+                        class="btn btn-outline-danger btn-sm d-flex align-items-center gap-2 px-3 js-disable-link">
 
                         <i class="bi bi-trash3"></i>
 
@@ -45,8 +45,8 @@
 
                     </a>
 
-                    <a href="{{ route('brand.create') }}"
-                        class="btn btn-brand btn-sm d-flex align-items-center gap-2 px-3">
+                    <a data-bs-toggle="offcanvas" href="#tambahBrand"
+                        class="btn btn-brand >
 
                         <i class="bi bi-plus-circle"></i>
 
@@ -62,8 +62,7 @@
                         <div class="position-relative">
                             <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
                             <input type="text" class="form-control search-control-pill user-search-input ps-5"
-                                name="search" value="{{ request('search') }}"
-                                placeholder="Cari kode atau nama brand...">
+                                name="search" value="{{ request('search') }}" placeholder="Cari kode atau nama brand...">
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -120,7 +119,7 @@
                             </td>
                             <td>
                                 <div class="d-flex justify-content-center align-items-center gap-3">
-                                    <a href="{{ route('brand.edit', $item) }}" class="action-icon-btn action-icon-edit"
+                                    <a href="{{ route('brand.edit', $item) }}" class="action-icon-btn action-icon-edit js-disable-link"
                                         title="Edit">
                                         <i class="bi bi-pencil"></i>
                                     </a>
@@ -133,8 +132,7 @@
                                         </button>
                                     </form>
                                     <label class="toggle-switch-wrap toggle-sm">
-                                        <input type="checkbox" class="js-brand-status-toggle"
-                                            data-id="{{ $item->id }}"
+                                        <input type="checkbox" class="js-brand-status-toggle" data-id="{{ $item->id }}"  onclick="return confirm('Yakin ingin mengubah status brand?')"
                                             {{ $item->status_brand == 'aktif' ? 'checked' : '' }}>
 
                                         <span class="toggle-switch-slider"></span>
@@ -214,5 +212,79 @@
             </nav>
         </div>
     </section>
+
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="tambahBrand">
+
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title">Tambah Brand</h5>
+
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas">
+            </button>
+        </div>
+
+        <div class="offcanvas-body">
+
+            <form action="{{ route('brand.store') }}" method="POST">
+
+                @csrf
+
+                <div class="mb-4">
+
+                    <label class="form-label fw-semibold">
+                        Kode Brand
+                    </label>
+
+                    <input type="text" class="form-control form-control-pill" value="{{ $kodeBrand }}" disabled>
+
+                </div>
+
+                <div class="mb-4">
+
+                    <label class="form-label fw-semibold">
+                        Nama Brand
+                    </label>
+
+                    <input type="text" class="form-control form-control-pill" name="nama_brand"
+                        value="{{ old('nama_brand') }}" placeholder="Masukkan nama brand">
+
+                </div>
+
+                <div class="mb-5">
+
+                    <label class="d-flex justify-content-between align-items-center">
+
+                        <span class="fw-semibold">
+                            Status Aktif
+                        </span>
+
+                        <span class="toggle-switch-wrap">
+
+                            <input type="checkbox" name="status_brand" value="aktif" checked>
+
+                            <span class="toggle-switch-slider"></span>
+
+                        </span>
+
+                    </label>
+
+                </div>
+
+                <div class="d-grid">
+
+                    <button type="submit" class="btn btn-brand">
+
+                        <i class="bi bi-plus-circle me-2"></i>
+
+                        Tambah Brand
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
 
 @endsection

@@ -44,7 +44,6 @@ class SparepartController extends Controller
             })
 
             ->when($status, function ($query) use ($status) {
-
                 if ($status == 'out_stock') {
                     $query->where('stok', 0);
                 }
@@ -61,7 +60,6 @@ class SparepartController extends Controller
             ->latest()
             ->paginate(10)
             ->withQueryString();
-
         $kodeSparepart = Sparepart::generateKode();
 
         $kategori = Kategori::where(

@@ -51,12 +51,19 @@
                         </p>
                     </div>
 
+                    @if (session('error'))
+                        <div class="alert alert-danger d-flex align-items-center mb-4" role="alert">
+                            <span class="material-symbols-outlined me-2">error</span>
+                            {{ session('error') }}
+                        </div>
+                    @endif
+
                     <form method="POST" action="{{ route('login.process') }}">
                         @csrf
 
                         <!-- Input Email -->
                         <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
+                            <label for="email" class="form-label-login">Email</label>
                             <div class="input-icon-group">
                                 <span class="material-symbols-outlined input-icon">mail</span>
                                 <input type="email"
@@ -65,17 +72,12 @@
                                     placeholder="nama@gmail.com" required>
 
                             </div>
-                            @error('email')
-                                <div class="invalid-feedback d-block">
-                                    {{ $message }}
-                                </div>
-                            @enderror
                         </div>
 
                         <!-- Input Password -->
                         <div class="mb-3">
                             <div class="d-flex justify-content-between align-items-center">
-                                <label for="password" class="form-label">Password</label>
+                                <label for="password" class="form-label-login">Password</label>
                             </div>
                             <div class="input-icon-group">
                                 <span class="material-symbols-outlined input-icon">lock</span>

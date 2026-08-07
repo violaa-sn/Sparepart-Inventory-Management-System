@@ -40,7 +40,7 @@
                 <h3 class="section-title mb-0">Daftar Trash Sparepart</h3>
                 <div class="d-flex align-items-center gap-2">
 
-                    <a href="{{ route('spareparts.index') }}" class="btn btn-outline-secondary">
+                    <a href="{{ route('spareparts.index') }}" class="btn btn-outline-secondary js-disable-link">
                         <i class="bi bi-arrow-left"></i>
                         Kembali
                     </a>
@@ -147,10 +147,6 @@
                             </td>
                             <td>
                                 <div class="d-flex align-items-center justify-content-center gap-3">
-                                    <a href="{{ route('spareparts.trash.show', $sparepart) }}"
-                                        class="action-icon-btn action-icon-view" title="Detail">
-                                        <i class="bi bi-eye"></i>
-                                    </a>
                                     {{-- Restore --}}
                                     <form action="{{ route('spareparts.restore', $sparepart->id) }}" method="POST">
 

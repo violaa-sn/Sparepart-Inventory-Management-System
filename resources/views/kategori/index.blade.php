@@ -37,7 +37,7 @@
                 <div class="d-flex align-items-center gap-2">
 
                     <a href="{{ route('kategori.trash') }}"
-                        class="btn btn-outline-danger btn-sm d-flex align-items-center gap-2 px-3">
+                        class="btn btn-outline-danger btn-sm d-flex align-items-center gap-2 px-3 js-disable-link">
 
                         <i class="bi bi-trash3"></i>
 
@@ -45,15 +45,9 @@
 
                     </a>
 
-                    <a href="{{ route('kategori.create') }}"
-                        class="btn btn-brand btn-sm d-flex align-items-center gap-2 px-3">
-
-                        <i class="bi bi-plus-circle"></i>
-
+                    <a class="btn btn-brand" data-bs-toggle="offcanvas" href="#tambahKategori">
                         Tambah Kategori
-
                     </a>
-
                 </div>
             </div>
             <form method="GET" action="{{ route('kategori.index') }}">
@@ -120,7 +114,7 @@
                             </td>
                             <td>
                                 <div class="d-flex justify-content-center align-items-center gap-3">
-                                    <a href="{{ route('kategori.edit', $item) }}" class="action-icon-btn action-icon-edit"
+                                    <a href="{{ route('kategori.edit', $item) }}" class="action-icon-btn action-icon-edit js-disable-link"
                                         title="Edit">
                                         <i class="bi bi-pencil"></i>
                                     </a>
@@ -133,7 +127,7 @@
                                         </button>
                                     </form>
                                     <label class="toggle-switch-wrap toggle-sm">
-                                        <input type="checkbox" class="js-kategori-status-toggle"
+                                        <input type="checkbox" class="js-kategori-status-toggle" onclick="return confirm('Yakin ingin mengubah status kategori?')"
                                             data-id="{{ $item->id }}"
                                             {{ $item->status_kategori == 'aktif' ? 'checked' : '' }}>
 
@@ -214,5 +208,78 @@
             </nav>
         </div>
     </section>
+    
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="tambahKategori">
 
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title">Tambah Kategori</h5>
+
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas">
+            </button>
+        </div>
+
+        <div class="offcanvas-body">
+
+            <form action="{{ route('kategori.store') }}" method="POST">
+
+                @csrf
+
+                <div class="mb-4">
+
+                    <label class="form-label fw-semibold">
+                        Kode Kategori
+                    </label>
+
+                    <input type="text" class="form-control form-control-pill" value="{{ $kodeKategori }}" disabled>
+
+                </div>
+
+                <div class="mb-4">
+
+                    <label class="form-label fw-semibold">
+                        Nama Kategori
+                    </label>
+
+                    <input type="text" class="form-control form-control-pill" name="nama_kategori"
+                        value="{{ old('nama_kategori') }}" placeholder="Masukkan nama kategori">
+
+                </div>
+
+                <div class="mb-5">
+
+                    <label class="d-flex justify-content-between align-items-center">
+
+                        <span class="fw-semibold">
+                            Status Aktif
+                        </span>
+
+                        <span class="toggle-switch-wrap">
+
+                            <input type="checkbox" name="status_kategori" value="aktif" checked>
+
+                            <span class="toggle-switch-slider"></span>
+
+                        </span>
+
+                    </label>
+
+                </div>
+
+                <div class="d-grid">
+
+                    <button type="submit" class="btn btn-brand">
+
+                        <i class="bi bi-plus-circle me-2"></i>
+
+                        Tambah Kategori
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
 @endsection
